@@ -27,10 +27,11 @@ e.g. Reddit daily bonus
 ### Features
 - The project has user management system to separate profiles and block unauthorized access
 - User can define check-in templates for corresponding websites
+    - Templates are domain-specific
     - Templates can be either in pure http requests or using Selenium (to simulate mouse clicks)
 - User can instantiate templates to perform interactions using their own accounts
 - The project executes all instances periodically (e.g. every 24 hours)
-- The project supports long-running
+- The project supports persistent running
 - Logs are provided to keep track of the status of each instance
 - Email/push notifications can be sent to notify the user if one instance fails too many times
 - Backup & Restore templates & instances
@@ -48,10 +49,23 @@ e.g. Reddit daily bonus
 - Websites do not have strict validations on user interactions.
 
 ## Brief Timeline
-- Week 1: do this and this
-- Week 2: do this and this
-- Week 3: do this and this
-- Week 4: do this and this
+- Week 1: Set up API Server
+    1. Set up FastAPI server; handle requests
+    2. Set up database (possibly MongoDB)
+    3. Implement user management system (use token)
+    4. Implement dynamic script execution with custom cookies (template engine)
+- Week 2: Enable periodic tasks and persistent running
+    1. Instantiate templates with start time & period
+    2. Write logs
+    3. Add call-back timers
+    4. Ensure no leaks
+- Week 3: Implement user-friendly front end; add more API entries
+    1. Login page to get token
+    2. Explore, create, and instantiate public templates
+    3. Manage private instances: update cookies; enable/disable; rename; delete
+- Week 4: Containerize with Docker & online deployment
+    1. Write Dockerfile
+    2. Export/Import database
 
 ## Rubrics
 ### Week 1
