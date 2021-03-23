@@ -39,6 +39,11 @@ e.g. Reddit daily bonus
 - Provide API w/ token/CMD to manage the state
 - Use OCR to recognize simple verification code
 
+### UI
+- Login page
+- Public templates: explore, create, and instantiate
+- Private instances: update cookies; enable/disable; rename; delete
+
 ### Scope of the project
 #### Limitations
 - Each website has different layouts & behaviors, so writing templates needs certain skills and is still time-comsuming.
@@ -52,8 +57,9 @@ e.g. Reddit daily bonus
 - Week 1: Set up API Server
     1. Set up FastAPI server; handle requests
     2. Set up database (possibly MongoDB)
-    3. Implement user management system (use token)
-    4. Implement dynamic script execution with custom cookies (template engine)
+    3. Set up Selenium
+    4. Implement user management system (use token)
+    5. Implement dynamic script execution with custom cookies (template engine)
 - Week 2: Enable periodic tasks and persistent running
     1. Instantiate templates with start time & period
     2. Write logs
@@ -66,17 +72,18 @@ e.g. Reddit daily bonus
 - Week 4: Containerize with Docker & online deployment
     1. Write Dockerfile
     2. Export/Import database
+    3. Finalize
 
 ## Rubrics
 ### Week 1
-| Category  | Total Score Allocated | Detailed Rubrics                                                            |
+| Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-|  Function a |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function a |
-|  Function b |  2  |  0: Didn't implement anything <br> 1: implemented ... <br> 2: completed function b |
-|  Function c |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function c |
-|  Function d |  5  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 5: completed function d |
-|  Test a |  6  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 6: completed test a |
-|  Test b |  4  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed test b |
+| Set up FastAPI | 2 | 0: Didn't implement anything <br> 1: FastAPI listen on port `8000` <br> 2: Can handle requests like `login` and `logout` |
+| Set up MongoDB | 2 | 0: None <br> 1: MongoDB running <br> 2: Can be accessed from API server
+| UMS | 5 | +1 for inserting a user into database <br> +1 for successfully logging in with password <br> +2 for using a token to represent a user <br> +1 for logout & invalidate token |
+| Script execution | 4 | +2 for implementing a Template class <br> +2 for executing scripts from API |
+| Selenium | 2 | +2 for calling Selenium from API |
+| Tests | 10 | +1 for 2 tests in API main process <br> +1 for 2 tests in MongoDB connection <br> +4 for 8 tests in user management (API or DB) <br> +3 for 6 tests in arbitrary script execution <br> +1 for 2 tests in Selenium |
 
 ### Week 2
 | Category  | Total Score Allocated | Detailed Rubrics                                                            |
