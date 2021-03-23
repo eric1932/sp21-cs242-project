@@ -1,23 +1,23 @@
-# A Mobile App called Project
-Bob (bob99) | Moderator: Ti-Chung Cheng (tcheng10)
-
-This is a mobile app about a project for CS242
+# A Website Check-In Framework
+Eric Liu (zl36) | Moderator: Bailey Tincher (tincher2)
 
 ## Abstract
 ### Project Purpose
-The purpose of this project is decribed here.
+This is an automated framework that *interacts* with third-party websites and receives check-in rewards every day on behalf of the user.
 
 ### Project Motivation
-The motivation of this project is decribed here.
+I believe most daily check-in tasks are designed by internet companies to maintain MAU (monthly active user). To receive all awards every day, the user must visit all of the websites and spend a huge amount of time on this, which is not very productive. This project aims to free people from such repetitive works.
 
 ## Technical Specification
-- Platform: Cross-platform app (React Native)
-- Programming Languages: JavaScript (Python for Flask should backend required)
-- Stylistic Conventions: Airbnb JavaScript Style Guide
-- SDK: Facebook SDK for React Native (possible for social login)
-- IDE: Visual Studio Code, Deco (IDE for React Native, acquired by Airbnb)
-- Tools/Interfaces: Mobile devices
-- Target Audience: Broad-range audience
+- Platform: 
+    - Back-End: Node, Python as API server, & MongoDB; or Docker
+    - Front-End: React
+- Programming Languages: JavaScript & Python
+- Stylistic Conventions: Airbnb JavaScript Style Guide; PEP 8
+- SDK: React, FastAPI
+- IDE: WebStorm, PyCharm, and/or Visual Studio Code
+- Tools/Interfaces: CLI; mobile & desktop browsers
+- Target Audience: People who knows about programming
 
 ## Functional Specification
 ### Features
