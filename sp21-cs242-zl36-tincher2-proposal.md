@@ -110,11 +110,10 @@ e.g. Reddit daily bonus
 
 
 ### Week 4
-| Category  | Total Score Allocated | Detailed Rubrics                                                            |
+| Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-|  Function a |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function a |
-|  Function b |  2  |  0: Didn't implement anything <br> 1: implemented ... <br> 2: completed function b |
-|  Function c |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function c |
-|  Function d |  5  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 5: completed function d |
-|  Test a |  6  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 6: completed test a |
-|  Test b |  4  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed test b |
+| Containerization | 5 | +2: write Dockerfile <br> +1: install FastAPI in the container <br> +1: install MongoDB <br> +1: install React server |
+| Database import/export | 3 | +1: import database <br> +2: export database |
+| Deploy online | 2 | +1: deploy to a VPS <br> +1: accessible from browser |
+| Test | 5 | +2: Valid Dockerfile <br> +3 for 6 other tests |
+| Manual test | 5 | +1 for each test <br> test database import/export <br> test deployment |
