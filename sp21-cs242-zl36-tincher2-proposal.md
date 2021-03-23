@@ -99,14 +99,14 @@ e.g. Reddit daily bonus
 
 
 ### Week 3
-| Category  | Total Score Allocated | Detailed Rubrics                                                            |
+| Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-|  Function a |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function a |
-|  Function b |  2  |  0: Didn't implement anything <br> 1: implemented ... <br> 2: completed function b |
-|  Function c |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function c |
-|  Function d |  5  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 5: completed function d |
-|  Test a |  6  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 6: completed test a |
-|  Test b |  4  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed test b |
+| Login page | 5 | +1: see the login page <br> +2: successfully login <br> +2: get correct token |
+| Template page | 5 | +1: template page design <br> +2: list public templates <br> +2: redirect to "create new instance" page |
+| Instance page | 5 | +1: list instances correctly <br> +2: update instance cookies <br> +1: enable/disable instance <br> +1: rename & delete instance |
+| API test cont. | 3 | +3: 6 tests for new implementations of API & others |
+| React snapshot test | 4 | +4 for all 8 tests |
+| Manual test | 3 | +1 for each test |
 
 
 ### Week 4
