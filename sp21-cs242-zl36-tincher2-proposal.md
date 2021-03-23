@@ -83,17 +83,19 @@ e.g. Reddit daily bonus
 | UMS | 5 | +1 for inserting a user into database <br> +1 for successfully logging in with password <br> +2 for using a token to represent a user <br> +1 for logout & invalidate token |
 | Script execution | 4 | +2 for implementing a Template class <br> +2 for executing scripts from API |
 | Selenium | 2 | +2 for calling Selenium from API |
-| Tests | 10 | +1 for 2 tests in API main process <br> +1 for 2 tests in MongoDB connection <br> +4 for 8 tests in user management (API or DB) <br> +3 for 6 tests in arbitrary script execution <br> +1 for 2 tests in Selenium |
+| Test line coverage | 8 | 8: 95% line coverage <br> 7: 90% line coverage <br> -1 for each 10% line coverage below 90% |
+| Test design | 2 | -1: not splitting to multiple files <br> -1: missing obvious cases |
+<!-- | Tests | 10 | +1 for 2 tests in API main process <br> +1 for 2 tests in MongoDB connection <br> +4 for 8 tests in user management (API or DB) <br> +3 for 6 tests in arbitrary script execution <br> +1 for 2 tests in Selenium | -->
 
 ### Week 2
-| Category  | Total Score Allocated | Detailed Rubrics                                                            |
+| Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-|  Function a |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function a |
-|  Function b |  2  |  0: Didn't implement anything <br> 1: implemented ... <br> 2: completed function b |
-|  Function c |  4  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed function c |
-|  Function d |  5  |  0: Didn't implement anything <br> 1: implemented ... <br> 3: implemented .... <br> 5: completed function d |
-|  Test a |  6  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 6: completed test a |
-|  Test b |  4  |  0: Didn't implement tests <br> 1: implemented ... <br> 3: implemented .... <br> 4: completed test b |
+| API | 2 | +2: update API according to this week's changes |
+| Instantiation | 4 | +1: task instantiation <br> +2: record start time & period <br> +1: store to file/database |
+| Callbacks | 4 | +2: Scripts executed after certain time <br> +2: Move on to the next iteration |
+| Logs | 5 | +1: output logs <br> +2: split logs for each instance <br> +2: custom log string (take return value) |
+| Test line coverage | 8 | 8: 95% line coverage <br> 7: 90% line coverage <br> -1 for each 10% line coverage below 90% |
+| Test design | 2 | -1: not splitting to multiple files <br> -1: missing obvious cases |
 
 
 ### Week 3
