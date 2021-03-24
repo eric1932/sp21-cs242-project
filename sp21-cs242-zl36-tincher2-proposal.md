@@ -123,3 +123,9 @@ I believe most of the tasks are deliberately designed by internet companies to k
 | CI/CD | 3 | +3: set up CI/CD in GitLab |
 | Test | 5 | +2: Dockerfile build success <br> +3 for 6 other tests |
 | Manual test | 5 | +1 for each test <br> test database import/export <br> test deployment <br> test HTTPS |
+
+## Links
+[Week 1](https://docs.google.com/spreadsheets/d/1f77odHr6OlwR1fM8vFNtqm_4WJKlskwQOF6iKr4ErmM/edit?usp=sharing)
+[Week 2](https://docs.google.com/spreadsheets/d/1R1S59BxS3HIJLChyRrzkauHVzWEpv942RBF7mV29YBc/edit?usp=sharing)
+[Week 3](https://docs.google.com/spreadsheets/d/1SAAhSzobMS2P94jIcUF4ZOF0hjmQJAhlIwrcCmXIbBU/edit?usp=sharing)
+[Week 4](https://docs.google.com/spreadsheets/d/16KgyirrcJPuUFC1b4L2bL0tPvSpIacJV0MCps0lBQd0/edit?usp=sharing)
