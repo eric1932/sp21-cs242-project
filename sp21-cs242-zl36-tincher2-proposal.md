@@ -73,10 +73,11 @@ I believe most of the tasks are deliberately designed by internet companies to k
     1. Login page to get token
     2. Explore, create, and instantiate public templates
     3. Manage private instances: update cookies; enable/disable; rename; delete
-- Week 4: Containerize with Docker & online deployment
+- Week 4: Containerize with Docker & online deployment; web security
     1. Write Dockerfile
     2. Export/Import database
-    3. Finalize
+    3. Use HTTPS to protect the network traffic
+    4. Finalize
 
 ## Rubrics
 ### Week 1
@@ -89,7 +90,6 @@ I believe most of the tasks are deliberately designed by internet companies to k
 | Selenium | 2 | +2 for calling Selenium from API |
 | Test line coverage | 8 | 8: 95% line coverage <br> 7: 90% line coverage <br> -1 for each 10% line coverage below 90% |
 | Test design | 2 | -1: not splitting to multiple files <br> -1: missing obvious cases |
-<!-- | Tests | 10 | +1 for 2 tests in API main process <br> +1 for 2 tests in MongoDB connection <br> +4 for 8 tests in user management (API or DB) <br> +3 for 6 tests in arbitrary script execution <br> +1 for 2 tests in Selenium | -->
 
 ### Week 2
 | Category | Total Score Allocated | Detailed Rubrics                              |
@@ -116,8 +116,10 @@ I believe most of the tasks are deliberately designed by internet companies to k
 ### Week 4
 | Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-| Containerization | 5 | +2: write Dockerfile <br> +1: install FastAPI in the container <br> +1: install MongoDB <br> +1: install React server |
-| Database import/export | 3 | +1: import database <br> +2: export database |
-| Deploy online | 2 | +1: deploy to a VPS <br> +1: accessible from browser |
-| Test | 5 | +2: Valid Dockerfile <br> +3 for 6 other tests |
-| Manual test | 5 | +1 for each test <br> test database import/export <br> test deployment |
+| Containerization | 3 | +1: write Dockerfile <br> +2: configure all softwares in the container |
+| Database import/export | 2 | +1: import database <br> +1: export database |
+| Deploy online | 4 | +3: deploy to a VPS / deploy using serverless frameworks <br> +1: accessible from other devices in public network |
+| HTTPS | 3 | +3: access React through HTTPS |
+| CI/CD | 3 | +3: set up CI/CD in GitLab |
+| Test | 5 | +2: Dockerfile build success <br> +3 for 6 other tests |
+| Manual test | 5 | +1 for each test <br> test database import/export <br> test deployment <br> test HTTPS |
