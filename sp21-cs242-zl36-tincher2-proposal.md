@@ -10,9 +10,9 @@ To be more specific, it can either compose HTTP requests (just like cURL) to per
 Another great feature is that it can run on cloud platforms, which means the users don't need to keep their computer open.
 
 ### Project Motivation
-I believe most daily check-in tasks are designed by internet companies to maintain MAU (monthly active user). To receive all awards every day, the user must visit all of the websites and spend a huge amount of time on this, which is not very productive. This project aims to free people from such repetitive works.
+Many websites have daily check-in tasks. For example, some network drives say users can get more spaces if they open the websites or apps every day; some forums will automatically suspend accounts after a long period of inactivity.
 
-e.g. Reddit daily bonus
+I believe most of the tasks are deliberately designed by internet companies to keep a high MAU (monthly active user). To accomplish all of them, the user must visit all websites one by one and spend a huge amount of time on this, which is not very productive. This project aims to free people from such repetitive works.
 
 ![](./Reddit.png)
 
