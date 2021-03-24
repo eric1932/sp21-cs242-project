@@ -3,7 +3,11 @@ Eric Liu (zl36) | Moderator: Bailey Tincher (tincher2)
 
 ## Abstract
 ### Project Purpose
-This is an automated framework that *interacts* with third-party websites and receives check-in rewards every day on behalf of the user.
+This project is an automated framework that interacts with third-party websites periodically using pure HTTP requests or clicks simulation by Selenium. It can help people to complete repetitive works on the website. A common example is to receive check-in rewards from websites (e.g. Reddit daily bonus coins).
+
+To be more specific, it can either compose HTTP requests (just like cURL) to perform actions like sign in or post an article or using Selenium to load a website and click on buttons just like a real person.
+
+Another great feature is that it can run on cloud platforms, which means the users don't need to keep their computer open.
 
 ### Project Motivation
 I believe most daily check-in tasks are designed by internet companies to maintain MAU (monthly active user). To receive all awards every day, the user must visit all of the websites and spend a huge amount of time on this, which is not very productive. This project aims to free people from such repetitive works.
