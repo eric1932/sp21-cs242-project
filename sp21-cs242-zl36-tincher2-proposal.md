@@ -19,10 +19,10 @@ I believe most of the tasks are deliberately designed by internet companies to k
 ## Technical Specification
 - Platform: 
     - Back-End: Node, Python as API server, & MongoDB; or Docker
-    - Front-End: React
+    - Front-End: ReactNative
 - Programming Languages: JavaScript & Python
 - Stylistic Conventions: Airbnb JavaScript Style Guide; PEP 8
-- SDK: React, FastAPI, Selenium
+- SDK: ReactNative, FastAPI, Selenium
 - IDE: WebStorm, PyCharm, and/or Visual Studio Code
 - Tools/Interfaces: CLI; mobile & desktop browsers
 - Target Audience: People who knows about programming
@@ -69,15 +69,17 @@ I believe most of the tasks are deliberately designed by internet companies to k
     2. Write logs
     3. Add call-back timers
     4. Ensure no leaks
-- Week 3: Implement user-friendly front end; add more API entries
+- Week 3: Implement user-friendly front end; focus on desktop browsers; add more API entries
     1. Login page to get token
     2. Explore, create, and instantiate public templates
     3. Manage private instances: update cookies; enable/disable; rename; delete
-- Week 4: Containerize with Docker & online deployment; web security
-    1. Write Dockerfile
-    2. Export/Import database
-    3. Use HTTPS to protect the network traffic
-    4. Finalize
+- Week 4: Adapt front-end for mobile devices; online deployment; web security
+    1. build native apps
+    2. iOS push notifications
+    3. Write Dockerfile
+    4. Export/Import database
+    5. Use HTTPS to protect the network traffic
+    6. Finalize
 
 ## Rubrics
 ### Week 1
@@ -110,23 +112,26 @@ I believe most of the tasks are deliberately designed by internet companies to k
 | Template page | 5 | +1: template page design <br> +2: list public templates <br> +2: redirect to "create new instance" page |
 | Instance page | 5 | +1: list instances correctly <br> +2: update instance cookies <br> +1: enable/disable instance <br> +1: rename & delete instance |
 | API test cont. | 3 | +3: 6 tests for new implementations of API & others |
-| React snapshot test | 4 | +4 for all 8 tests |
-| Manual test | 3 | +1 for each test |
+| snapshot test | 4 | +3 for 6 normal tests <br> +1 for 2 mock tests |
+| Documentation | 2 | +2: writing good documentation about the front-end |
+| ESLint | 1 | +1: using strict ESLint rules |
 
 
 ### Week 4
 | Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-| Containerization | 3 | +1: write Dockerfile <br> +2: configure all softwares in the container |
-| Database import/export | 2 | +1: import database <br> +1: export database |
-| Deploy online | 4 | +3: deploy to a VPS / deploy using serverless frameworks <br> +1: accessible from other devices in public network |
-| HTTPS | 3 | +3: access React through HTTPS |
-| CI/CD | 3 | +3: set up CI/CD in GitLab |
-| Test | 5 | +2: Dockerfile build success <br> +3 for 6 other tests |
-| Manual test | 5 | +1 for each test <br> test database import/export <br> test deployment <br> test HTTPS |
+| Public deployment | 2 | +2: access the website through the Internet |
+| Mobile port (iOS) | 7 | +2: mobile UI <br> +1: register push notification service <br> +2: send notifications when success and/or fail <br> +2: sideload .ipa |
+| Database import/export | 4 | +1: import database <br> +3: automated database backup |
+| CI/CD | 2 | +1: Auto lint/test <br> +1: auto-deployment |
+| Test | 6 | +1: manual notification test <br> +1: stress test <br> +2: error handling when the database is down <br> +2: error handling when the API server is down |
+| Documentation | 4 | +2: write documentation that helps others to download & set up the project <br> +2: create a website for documentation using tools like Docusaurus or GitHub pages |
 
 ## Links
 [Week 1](https://docs.google.com/spreadsheets/d/1f77odHr6OlwR1fM8vFNtqm_4WJKlskwQOF6iKr4ErmM/edit?usp=sharing)
+
 [Week 2](https://docs.google.com/spreadsheets/d/1R1S59BxS3HIJLChyRrzkauHVzWEpv942RBF7mV29YBc/edit?usp=sharing)
+
 [Week 3](https://docs.google.com/spreadsheets/d/1SAAhSzobMS2P94jIcUF4ZOF0hjmQJAhlIwrcCmXIbBU/edit?usp=sharing)
+
 [Week 4](https://docs.google.com/spreadsheets/d/16KgyirrcJPuUFC1b4L2bL0tPvSpIacJV0MCps0lBQd0/edit?usp=sharing)
