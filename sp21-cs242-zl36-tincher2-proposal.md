@@ -83,21 +83,22 @@ I believe most of the tasks are deliberately designed by internet companies to k
 ### Week 1
 | Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-| Set up FastAPI | 2 | 0: Didn't implement anything <br> 1: FastAPI listen on port `8000` <br> 2: Can handle requests like `login` and `logout` |
-| Set up MongoDB | 2 | 0: None <br> 1: MongoDB running <br> 2: Can be accessed from API server
+| Set up FastAPI | 1 | 0: Didn't implement anything <br> 1: FastAPI listen on port `8000` and can handle requests like `login` and `logout` |
+| Set up MongoDB | 1 | 0: None <br> 1: MongoDB can be accessed from API server
 | UMS | 5 | +1 for inserting a user into database <br> +1 for successfully logging in with password <br> +2 for using a token to represent a user <br> +1 for logout & invalidate token |
 | Script execution | 4 | +2 for implementing a Template class <br> +2 for executing scripts from API |
-| Selenium | 2 | +2 for calling Selenium from API |
+| pylint | 2 | +1 for using pylint and appropriate rules <br> +1 if score >= 0.9 |
+| Selenium | 2 | +1 for connecting WebDriver in filesystem and Selenium in python <br> +1 for using Selenium to retrieve today's logo of Google (warmup for next week's content) |
 | Test line coverage | 8 | 8: 95% line coverage <br> 7: 90% line coverage <br> -1 for each 10% line coverage below 90% |
 | Test design | 2 | -1: not splitting to multiple files <br> -1: missing obvious cases |
 
 ### Week 2
 | Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
-| API | 2 | +2: update API according to this week's changes |
+| API | 2 | +1: implement login API <br> +1: implement script execution API that calls Selenium |
 | Instantiation | 4 | +1: task instantiation <br> +2: record start time & period <br> +1: store to file/database |
 | Callbacks | 4 | +2: Scripts executed after certain time <br> +2: Move on to the next iteration |
-| Logs | 5 | +1: output logs <br> +2: split logs for each instance <br> +2: custom log string (take return value) |
+| Logs | 5 | +1: output logs <br> +2: split logs for each instance <br> +2: custom log string (take return value of the `exec` function as the log message) |
 | Test line coverage | 8 | 8: 95% line coverage <br> 7: 90% line coverage <br> -1 for each 10% line coverage below 90% |
 | Test design | 2 | -1: not splitting to multiple files <br> -1: missing obvious cases |
 
