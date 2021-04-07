@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from pydantic import BaseModel
 
 from api_message import *
@@ -28,10 +28,10 @@ async def login(item: LoginItem):
         return token
 
 
-@app.get("/logout/{username}/{token}")
-async def logout(username: str, token: str, full_logout: Optional[bool] = False):
-    result = mongo.user_logout(username, token, full_logout)
-    if result:
-        return resp_200_logout_success
-    else:
-        return resp_401_logout_fail
+@app.get("/logout/{username}")
+async def logout(username: str, token: Optional[str] = Header(None), full_logout: Optional[bool] = False):
+    if token:
+        result = mongo.user_logout(username, token, full_logout)
+        if result:
+            return resp_200_logout_success
+    return resp_401_logout_fail
