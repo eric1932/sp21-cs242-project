@@ -1,9 +1,11 @@
+import os
+from typing import Optional
+
 from fastapi import FastAPI, Header
 from pydantic import BaseModel
 
 from api_message import *
-from util.my_mongo import MyMongoInstance, DBCollections
-from typing import Optional
+from util.my_mongo import MyMongoInstance
 
 app = FastAPI()
 mongo = MyMongoInstance()
@@ -40,3 +42,13 @@ async def logout(username: str, token: Optional[str] = Header(None), full_logout
 @app.get("/show/{token}")
 async def show_user_with_token(token: str):
     return mongo.token_to_username(token)
+
+
+@app.get("/sign_in/{name}")
+async def sign_in(name: str):
+    exist = (name + ".py") in os.listdir("checkin_scripts")
+    if not exist:
+        return "script not exist"
+    else:
+        exec(f"from checkin_scripts.{name} import Workflow", globals())
+        exec("Workflow().exec()")
