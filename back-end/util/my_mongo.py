@@ -7,7 +7,7 @@ import pymongo
 from pymongo.collection import Collection
 from pymongo.database import Database
 
-import credential_helper
+import util.credential_helper as credential_helper
 
 dotenv.load_dotenv()
 
