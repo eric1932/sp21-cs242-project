@@ -1,12 +1,13 @@
 import os
 from enum import Enum, unique
+from typing import Union
 
 import dotenv
 import pymongo
 from pymongo.collection import Collection
 from pymongo.database import Database
 
-import hash_helper
+import credential_helper
 
 dotenv.load_dotenv()
 
@@ -20,6 +21,7 @@ class DBCollections(Enum):
 class UserCollectionAttrs(Enum):
     Username = "username"
     Password = "password"
+    Tokens = "tokens"
 
 
 def read_env():
@@ -56,16 +58,56 @@ class MyMongoInstance:
     def user_create(self, username: str, pw_raw: str):
         self._collections[DBCollections.User].insert_one({
             UserCollectionAttrs.Username.value: username,
-            UserCollectionAttrs.Password.value: hash_helper.hash_password(pw_raw)
+            UserCollectionAttrs.Password.value: credential_helper.hash_password(pw_raw),
+            UserCollectionAttrs.Tokens.value: []
         })
 
     def user_update(self, username: str, new_pw_raw: str):
         self._collections[DBCollections.User].update_one(
             {UserCollectionAttrs.Username.value: username},
             {"$set": {
-                UserCollectionAttrs.Password.value: hash_helper.hash_password(new_pw_raw)
+                UserCollectionAttrs.Password.value: credential_helper.hash_password(new_pw_raw)
+            }}
+        )
+        # logout after password change
+        self._collections[DBCollections.User].update_one(
+            {UserCollectionAttrs.Username.value: username},
+            {"$set": {
+                UserCollectionAttrs.Tokens.value: []
             }}
         )
 
-    def user_login(self, username: str, pw_raw: str):
-        pass
+    def user_login(self, username: str, pw_raw: str) -> Union[str, None]:
+        query = self.user_query(username)
+        if query and query[UserCollectionAttrs.Password.value] == credential_helper.hash_password(pw_raw):
+            token = credential_helper.generate_token()
+            self._collections[DBCollections.User].update_one(
+                {UserCollectionAttrs.Username.value: username},
+                {"$push": {
+                    UserCollectionAttrs.Tokens.value: token
+                }}
+            )
+            return token
+        else:
+            return None
+
+    def user_logout(self, username: str, val_token: str, remove_all: bool = False) -> bool:
+        query = self.user_query(username)
+        if query:
+            if remove_all:
+                self._collections[DBCollections.User].update_one(
+                    {UserCollectionAttrs.Username.value: username},
+                    {"$set": {
+                        UserCollectionAttrs.Tokens.value: []
+                    }}
+                )
+            else:
+                self._collections[DBCollections.User].update_one(
+                    {UserCollectionAttrs.Username.value: username},
+                    {"$pull": {
+                        UserCollectionAttrs.Tokens.value: val_token
+                    }}
+                )
+            return True
+        else:
+            return False
