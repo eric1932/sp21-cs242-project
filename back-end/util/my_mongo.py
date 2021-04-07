@@ -15,6 +15,7 @@ dotenv.load_dotenv()
 @unique
 class DBCollections(Enum):
     User = "user"
+    TokenToUser = "tokenToUser"
 
 
 @unique
@@ -52,6 +53,9 @@ class MyMongoInstance:
     def _set_up_indexes(self):
         self._collections[DBCollections.User].create_index([
             (UserCollectionAttrs.Username.value, pymongo.ASCENDING)
+        ], unique=True)
+        self._collections[DBCollections.TokenToUser].create_index([
+            ("token", pymongo.ASCENDING)
         ], unique=True)
 
     def _user_update_one(self, username: str, action: PymongoUpdateActions, content: dict):
@@ -91,6 +95,11 @@ class MyMongoInstance:
             self._user_update_one(username, PymongoUpdateActions.Push, {
                 UserCollectionAttrs.Tokens.value: token
             })
+            self._collections[DBCollections.TokenToUser].update_one(
+                {"token": token},
+                {"$set": {"username": username}},
+                upsert=True
+            )
             return token
         else:
             return None
@@ -109,3 +118,7 @@ class MyMongoInstance:
             return True
         else:
             return False
+
+    def token_to_username(self, token: str) -> Union[str, None]:
+        query = self._collections[DBCollections.TokenToUser].find_one({"token": token})
+        return query["username"] if query else None

@@ -2,7 +2,7 @@ from fastapi import FastAPI, Header
 from pydantic import BaseModel
 
 from api_message import *
-from util.my_mongo import MyMongoInstance
+from util.my_mongo import MyMongoInstance, DBCollections
 from typing import Optional
 
 app = FastAPI()
@@ -35,3 +35,8 @@ async def logout(username: str, token: Optional[str] = Header(None), full_logout
         if result:
             return resp_200_logout_success
     return resp_401_logout_fail
+
+
+@app.get("/show/{token}")
+async def show_user_with_token(token: str):
+    return mongo.token_to_username(token)
