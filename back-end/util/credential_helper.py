@@ -16,7 +16,7 @@ def hash_password(password: str) -> bytes:
 
 def generate_token() -> str:
     """
-    generate a random token of 16 digits
-    :return: a hex string with length of 16
+    generate a random token of 16 bytes (32 chars)
+    :return: a hex string with length of 32
     """
     return secrets.token_hex(16)
