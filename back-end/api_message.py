@@ -1,3 +1,6 @@
+"""
+API messages
+"""
 from fastapi import status
 from fastapi.responses import JSONResponse
 
