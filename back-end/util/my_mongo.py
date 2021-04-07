@@ -60,13 +60,13 @@ class MyMongoInstance:
             {action.value: content}
         )
 
-    def get_collection(self, collection: DBCollections):
-        return self._database[collection.value]
-
-    def user_query(self, username: str):
+    def _user_query(self, username: str):
         return self._collections[DBCollections.User].find_one({
             UserCollectionAttrs.Username.value: username
         })
+
+    def get_collection(self, collection: DBCollections):
+        return self._database[collection.value]
 
     def user_create(self, username: str, pw_raw: str):
         self._collections[DBCollections.User].insert_one({
@@ -85,7 +85,7 @@ class MyMongoInstance:
         })
 
     def user_login(self, username: str, pw_raw: str) -> Union[str, None]:
-        query = self.user_query(username)
+        query = self._user_query(username)
         if query and query[UserCollectionAttrs.Password.value] == credential_helper.hash_password(pw_raw):
             token = credential_helper.generate_token()
             self._user_update_one(username, PymongoUpdateActions.Push, {
@@ -96,7 +96,7 @@ class MyMongoInstance:
             return None
 
     def user_logout(self, username: str, val_token: str, remove_all: bool = False) -> bool:
-        query = self.user_query(username)
+        query = self._user_query(username)
         if query and val_token in query[UserCollectionAttrs.Tokens.value]:
             if remove_all:
                 self._user_update_one(username, PymongoUpdateActions.Set, {
