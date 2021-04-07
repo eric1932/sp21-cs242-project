@@ -50,5 +50,7 @@ async def sign_in(name: str):
     if not exist:
         return "script not exist"
     else:
+        url = [""]
         exec(f"from checkin_scripts.{name} import Workflow", globals())
-        exec("Workflow().exec()")
+        exec("url[0] = Workflow().exec()", globals(), locals())
+        return url[0]
