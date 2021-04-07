@@ -24,6 +24,13 @@ class UserCollectionAttrs(Enum):
     Tokens = "tokens"
 
 
+@unique
+class PymongoUpdateActions(Enum):
+    Set = "$set"
+    Push = "$push"
+    Pull = "$pull"
+
+
 def read_env():
     user_ = os.getenv("DB_USER")
     pass_ = os.getenv("DB_PASS")
@@ -47,6 +54,12 @@ class MyMongoInstance:
             (UserCollectionAttrs.Username.value, pymongo.ASCENDING)
         ], unique=True)
 
+    def _user_update_one(self, username: str, action: PymongoUpdateActions, content: dict):
+        self._collections[DBCollections.User].update_one(
+            {UserCollectionAttrs.Username.value: username},
+            {action.value: content}
+        )
+
     def get_collection(self, collection: DBCollections):
         return self._database[collection.value]
 
@@ -63,30 +76,21 @@ class MyMongoInstance:
         })
 
     def user_update(self, username: str, new_pw_raw: str):
-        self._collections[DBCollections.User].update_one(
-            {UserCollectionAttrs.Username.value: username},
-            {"$set": {
-                UserCollectionAttrs.Password.value: credential_helper.hash_password(new_pw_raw)
-            }}
-        )
+        self._user_update_one(username, PymongoUpdateActions.Set, {
+            UserCollectionAttrs.Password.value: credential_helper.hash_password(new_pw_raw)
+        })
         # logout after password change
-        self._collections[DBCollections.User].update_one(
-            {UserCollectionAttrs.Username.value: username},
-            {"$set": {
-                UserCollectionAttrs.Tokens.value: []
-            }}
-        )
+        self._user_update_one(username, PymongoUpdateActions.Set, {
+            UserCollectionAttrs.Tokens.value: []
+        })
 
     def user_login(self, username: str, pw_raw: str) -> Union[str, None]:
         query = self.user_query(username)
         if query and query[UserCollectionAttrs.Password.value] == credential_helper.hash_password(pw_raw):
             token = credential_helper.generate_token()
-            self._collections[DBCollections.User].update_one(
-                {UserCollectionAttrs.Username.value: username},
-                {"$push": {
-                    UserCollectionAttrs.Tokens.value: token
-                }}
-            )
+            self._user_update_one(username, PymongoUpdateActions.Push, {
+                UserCollectionAttrs.Tokens.value: token
+            })
             return token
         else:
             return None
@@ -95,19 +99,13 @@ class MyMongoInstance:
         query = self.user_query(username)
         if query:
             if remove_all:
-                self._collections[DBCollections.User].update_one(
-                    {UserCollectionAttrs.Username.value: username},
-                    {"$set": {
-                        UserCollectionAttrs.Tokens.value: []
-                    }}
-                )
+                self._user_update_one(username, PymongoUpdateActions.Set, {
+                    UserCollectionAttrs.Tokens.value: []
+                })
             else:
-                self._collections[DBCollections.User].update_one(
-                    {UserCollectionAttrs.Username.value: username},
-                    {"$pull": {
-                        UserCollectionAttrs.Tokens.value: val_token
-                    }}
-                )
+                self._user_update_one(username, PymongoUpdateActions.Pull, {
+                    UserCollectionAttrs.Tokens.value: val_token
+                })
             return True
         else:
             return False
