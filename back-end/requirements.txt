@@ -8,3 +8,5 @@ dnspython
 python-dotenv~=0.17.0
 
 selenium~=3.141.0
+
+requests

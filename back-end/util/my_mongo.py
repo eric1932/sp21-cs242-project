@@ -60,11 +60,11 @@ class MyMongoInstance:
     """
     MongoDB manager for this project. Connect & manipulate values.
     """
-    def __init__(self):
-        user, password, host, db_name = read_env()
+    def __init__(self, db_name: str = None):
+        user, password, host, db_name_env = read_env()
         self._client = pymongo.MongoClient(f"mongodb+srv://{user}:{password}@{host}/"
                                            f"?retryWrites=true&w=majority")
-        self._database: Database = self._client[db_name]
+        self._database: Database = self._client[db_name if db_name else db_name_env]
         self._collections: dict[DBCollections, Collection] = {x: self._database[x.value] for x in DBCollections}
 
         self._set_up_indexes()
@@ -89,7 +89,7 @@ class MyMongoInstance:
         })
 
     # notTODO remove
-    def get_collection(self, collection: DBCollections):
+    def get_collection(self, collection: DBCollections) -> Collection:
         """
         Get a collection from the database. Limit to those defined in DBCollections
         :param collection: DBCollections' item
@@ -102,7 +102,6 @@ class MyMongoInstance:
         Create a user
         :param username: username
         :param pw_raw: password clear text
-        :return:
         """
         self._collections[DBCollections.USER].insert_one({
             UserCollectionAttrs.USERNAME.value: username,
@@ -115,7 +114,6 @@ class MyMongoInstance:
         Update user's password
         :param username: username
         :param new_pw_raw: password clear text
-        :return:
         """
         self._user_update_one(username, PymongoUpdateActions.SET, {
             UserCollectionAttrs.PASSWORD.value: credential_helper.hash_password(new_pw_raw)
