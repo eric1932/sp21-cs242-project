@@ -97,7 +97,7 @@ class MyMongoInstance:
 
     def user_logout(self, username: str, val_token: str, remove_all: bool = False) -> bool:
         query = self.user_query(username)
-        if query:
+        if query and val_token in query[UserCollectionAttrs.Tokens.value]:
             if remove_all:
                 self._user_update_one(username, PymongoUpdateActions.Set, {
                     UserCollectionAttrs.Tokens.value: []
