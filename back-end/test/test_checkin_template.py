@@ -1,7 +1,7 @@
 import unittest
 
 from selenium import webdriver
-import checkin_template
+
 from checkin_template import CheckinTemplate
 
 
