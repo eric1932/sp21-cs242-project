@@ -3,6 +3,7 @@ MongoDB manager for this project. Connect & manipulate values.
 """
 import os
 from enum import Enum, unique
+from typing import Tuple
 from typing import Union
 
 import dotenv
@@ -44,16 +45,17 @@ class PymongoUpdateActions(Enum):
     PULL = "$pull"
 
 
-def read_env():
+def read_env() -> Tuple:
     """
     Read MongoDB credentials from environment variables
-    :return:
+    :return: user, pass, host, db_name, db_use_srv
     """
     user_ = os.getenv("DB_USER")
     pass_ = os.getenv("DB_PASS")
     host_ = os.getenv("DB_HOST")
     db_name_ = os.getenv("DB_NAME")
-    return user_, pass_, host_, db_name_
+    db_use_srv_: bool = (r := os.getenv("DB_SRV")) is not None and r != "0"
+    return user_, pass_, host_, db_name_, db_use_srv_
 
 
 class MyMongoInstance:
@@ -61,9 +63,13 @@ class MyMongoInstance:
     MongoDB manager for this project. Connect & manipulate values.
     """
     def __init__(self, db_name: str = None):
-        user, password, host, db_name_env = read_env()
-        self._client = pymongo.MongoClient(f"mongodb+srv://{user}:{password}@{host}/"
-                                           f"?retryWrites=true&w=majority")
+        user, password, host, db_name_env, db_use_srv = read_env()
+        if db_use_srv:
+            self._client = pymongo.MongoClient(f"mongodb+srv://{user}:{password}@{host}/"
+                                               f"?retryWrites=true&w=majority")
+        else:
+            self._client = pymongo.MongoClient(f"mongodb://{user}:{password}@{host}/"
+                                               f"?retryWrites=true&w=majority")
         self._database: Database = self._client[db_name if db_name else db_name_env]
         self._collections: dict[DBCollections, Collection] = {x: self._database[x.value] for x in DBCollections}
 
