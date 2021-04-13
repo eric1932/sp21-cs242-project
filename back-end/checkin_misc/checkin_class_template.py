@@ -6,6 +6,17 @@ from typing import Union
 
 from selenium import webdriver
 
+from checkin_misc.task_logger import get_module_logger
+
+
+def log(func):
+    def wrapper(self, *args, **kwargs):
+        ret_val = func(self, *args, **kwargs)
+        self.logger.info(ret_val)
+        return ret_val
+
+    return wrapper
+
 
 class CheckinTemplate:
     """
@@ -14,6 +25,7 @@ class CheckinTemplate:
     def __init__(self, module_name, use_chromedriver: bool = True):
         self.module_name = module_name
         self.use_chromedriver = use_chromedriver
+        self.logger = get_module_logger(module_name)
 
     # notTODO make private
     def get_driver(self, headless: bool = True) -> Union[webdriver.Chrome, webdriver.Firefox]:

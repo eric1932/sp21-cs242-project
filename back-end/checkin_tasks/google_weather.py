@@ -5,7 +5,7 @@ from time import sleep
 
 from selenium.webdriver.common.keys import Keys
 
-from checkin_misc.checkin_class_template import CheckinTemplate
+from checkin_misc.checkin_class_template import CheckinTemplate, log
 
 
 class Workflow(CheckinTemplate):
@@ -15,6 +15,7 @@ class Workflow(CheckinTemplate):
     def __init__(self):
         super().__init__("Google Weather")
 
+    @log
     def exec(self):
         driver = self.get_driver(headless=False)
         driver.get("https://google.com")
@@ -31,3 +32,7 @@ class Workflow(CheckinTemplate):
         driver.quit()  # notTODO func modifier
 
         return image_url
+
+
+if __name__ == '__main__':
+    Workflow().exec()
