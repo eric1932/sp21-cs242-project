@@ -5,7 +5,7 @@ from time import sleep
 
 from selenium.webdriver.common.keys import Keys
 
-from checkin_template import CheckinTemplate
+from checkin_misc.checkin_class_template import CheckinTemplate
 
 
 class Workflow(CheckinTemplate):

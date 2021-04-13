@@ -77,10 +77,10 @@ async def sign_in(name: str):
     """
     if os.getcwd().endswith("test"):
         os.chdir("..")
-    exist = (name + ".py") in os.listdir("checkin_scripts")
+    exist = (name + ".py") in os.listdir("checkin_tasks")
     if not exist:
         return "script not exist"
     url = [""]
-    exec(f"from checkin_scripts.{name} import Workflow", globals())
+    exec(f"from checkin_tasks.{name} import Workflow", globals())
     exec("url[0] = Workflow().exec()", globals(), locals())
     return url[0]

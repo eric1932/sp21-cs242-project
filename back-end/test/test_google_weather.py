@@ -1,6 +1,6 @@
 import unittest
 
-from checkin_scripts.google_weather import Workflow
+from checkin_tasks.google_weather import Workflow
 
 
 class MyTestCase(unittest.TestCase):

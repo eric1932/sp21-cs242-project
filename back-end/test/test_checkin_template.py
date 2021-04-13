@@ -2,7 +2,7 @@ import unittest
 
 from selenium import webdriver
 
-from checkin_template import CheckinTemplate
+from checkin_misc.checkin_class_template import CheckinTemplate
 
 
 class MyTestCase(unittest.TestCase):
