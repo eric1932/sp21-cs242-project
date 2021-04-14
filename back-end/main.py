@@ -31,7 +31,7 @@ class LoginItem(BaseModel):
 
 
 @app.on_event("startup")
-async def startup_event():
+async def startup_event():  # pragma: no cover
     """
     Actions performed when FastAPI starts up.
     :return:
@@ -41,7 +41,7 @@ async def startup_event():
 
 
 @app.on_event("shutdown")
-async def shutdown_event():
+async def shutdown_event():  # pragma: no cover
     """
     Actions performed when FastAPI goes down.
     """
@@ -153,7 +153,7 @@ async def user_remove_task(task_id_str: str,
         if mongo.task_remove_from_user(task_id_str):
             # remove from scheduler
             sched.SCHEDULER.remove_job(task_id_str)
-            return {"status", "success"}
+            return {"status": "success"}
         else:
             return {"status": "fail", "error": "cannot find task"}
     else:

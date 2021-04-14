@@ -205,6 +205,8 @@ class MyMongoInstance:
 
     def _task_find_index(self, target_task_id: List[str]):
         query = self._user_query(target_task_id[0])
+        if not query:
+            return -1
         tasks: List[Task] = query[UserCollectionAttrs.TASKS.value]
         # TODO magic?
         return [x["apscheduler_id"] == target_task_id for x in tasks].index(True)
@@ -263,6 +265,8 @@ class MyMongoInstance:
         try:
             index = self._task_find_index(task_id)
         except ValueError:
+            return False
+        if index == -1:
             return False
         # remove from user attr
         self._collections[DBCollections.USER].update_one(

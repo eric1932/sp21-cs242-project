@@ -31,12 +31,12 @@ _executors = {
 SCHEDULER = BackgroundScheduler(jobstores=_job_stores, job_defaults=_job_defaults, executors=_executors)
 
 
-def event_listener(event: JobExecutionEvent):
+def event_listener(event: JobExecutionEvent):  # pragma: no cover
     # update last_success_time
     mongo.task_update_last_success_time(event.job_id)
 
 
-def api_startup():
+def api_startup():  # pragma: no cover
     print(MongoDBJobStore(database=os.getenv("DB_NAME"), collection="checkinJob",
                           client=MyMongoInstance().client).get_all_jobs())
     SCHEDULER.start()
@@ -45,7 +45,7 @@ def api_startup():
     SCHEDULER.add_listener(event_listener, EVENT_JOB_EXECUTED)
 
 
-def api_shutdown():
+def api_shutdown():  # pragma: no cover
     SCHEDULER.shutdown(wait=True)
 
 

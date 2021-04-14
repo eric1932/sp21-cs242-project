@@ -50,12 +50,17 @@ class CheckinTemplate:
             )
         else:
             # use GeckoDriver
-            # notTODO
+            options = webdriver.FirefoxOptions()
+            options.headless = headless
+
             caps = DesiredCapabilities().FIREFOX
             if eager:
                 caps["pageLoadStrategy"] = "eager"
 
-            return webdriver.Firefox()
+            return webdriver.Firefox(
+                options=options,
+                capabilities=caps
+            )
 
     @abc.abstractmethod
     def exec(self):
