@@ -10,6 +10,7 @@ from typing import Union
 
 import dotenv
 import pymongo
+from apscheduler.schedulers.base import BaseScheduler
 from pymongo.collection import Collection
 from pymongo.database import Database
 
@@ -202,6 +203,12 @@ class MyMongoInstance:
         query = self._collections[DBCollections.TOKEN_TO_USER].find_one({"token": token})
         return query[UserCollectionAttrs.USERNAME.value] if query else None
 
+    def _task_find_index(self, target_task_id: List[str]):
+        query = self._user_query(target_task_id[0])
+        tasks: List[Task] = query[UserCollectionAttrs.TASKS.value]
+        # TODO magic?
+        return [x["apscheduler_id"] == target_task_id for x in tasks].index(True)
+
     def task_list(self, username: str) -> List[Task]:
         query = self._user_query(username)
         return query[UserCollectionAttrs.TASKS.value]
@@ -211,16 +218,17 @@ class MyMongoInstance:
             UserCollectionAttrs.TASKS.value: task
         })
 
-    def task_update_last_success_time(self, target_task_id: Union[TaskID, str]):
+    def task_update_last_success_time(self, target_task_id: Union[TaskID, str]) -> bool:
         if isinstance(target_task_id, TaskID):
             target_task_id = list(target_task_id)
         else:
             target_task_id = target_task_id.split('-')
-        # First, find index
-        query = self._user_query(target_task_id[0])
-        tasks: List[Task] = query[UserCollectionAttrs.TASKS.value]
-        # TODO magic?
-        index = [x["apscheduler_id"] == target_task_id for x in tasks].index(True)
+
+        # First, find index (also if task exists)
+        try:
+            index = self._task_find_index(target_task_id)
+        except ValueError:
+            return False
 
         # Then, update it with current time
         # TODO magic?
@@ -228,6 +236,23 @@ class MyMongoInstance:
             {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
             {"$set": {f"tasks.{index}.last_success_time": datetime.now()}}
         )
+        return True
 
-    def task_remove(self, task_id_str: str):
-        pass
+    def task_remove(self, task_id_str: str, scheduler: BaseScheduler) -> bool:
+        task_id = task_id_str.split('-')
+        try:
+            index = self._task_find_index(task_id)
+        except ValueError:
+            return False
+        # remove from user attr
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: task_id[0]},
+            {"$unset": {f"tasks.{index}": 1}}
+        )
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: task_id[0]},
+            {"$pull": {f"tasks": None}}
+        )
+        # remove from scheduler
+        scheduler.remove_job(task_id_str)
+        return True

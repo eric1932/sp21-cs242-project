@@ -148,6 +148,14 @@ async def user_add_task(template: str,
         return resp_404_invalid_token
 
 
-@app.get("/task/remove")
-async def user_remove_task():
-    pass
+@app.get("/task/remove/{task_id_str}")
+async def user_remove_task(task_id_str: str,
+                           token: Optional[str] = Header(None)):
+    username = mongo.token_to_username(token)
+    if username:
+        if mongo.task_remove(task_id_str, scheduler=sched.SCHEDULER):
+            return {"status", "success"}
+        else:
+            return {"status": "fail", "error": "cannot find task"}
+    else:
+        return resp_404_invalid_token
