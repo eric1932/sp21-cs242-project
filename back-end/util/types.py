@@ -5,7 +5,7 @@ from typing import TypedDict, NamedTuple
 class TaskID(NamedTuple):
     username: str
     template: str
-    num: int
+    num: str
 
 
 class Task(TypedDict):

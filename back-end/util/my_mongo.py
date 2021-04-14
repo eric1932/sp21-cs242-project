@@ -19,6 +19,8 @@ from util.types import Task, TaskID
 dotenv.load_dotenv()
 
 _MONGO_CLIENT_INSTANCE = None
+_DATABASE = None
+_COLLECTIONS = None
 
 
 @unique
@@ -69,10 +71,15 @@ class MyMongoInstance:
     MongoDB manager for this project. Connect & manipulate values.
     """
     def __init__(self, db_name: str = None):
+        global _MONGO_CLIENT_INSTANCE
+        global _DATABASE
+        global _COLLECTIONS
         user, password, host, db_name_env, db_use_srv = read_env()
 
         if _MONGO_CLIENT_INSTANCE:
             self.client = _MONGO_CLIENT_INSTANCE
+            self._database = _DATABASE
+            self._collections = _COLLECTIONS
         else:
             if db_use_srv:
                 self.client = pymongo.MongoClient(f"mongodb+srv://{user}:{password}@{host}/"
@@ -80,11 +87,14 @@ class MyMongoInstance:
             else:
                 self.client = pymongo.MongoClient(f"mongodb://{user}:{password}@{host}/"
                                                   f"?retryWrites=true&w=majority")
+            self._database: Database = self.client[db_name if db_name else db_name_env]
+            self._collections: dict[DBCollections, Collection] = {x: self._database[x.value] for x in DBCollections}
 
-        self._database: Database = self.client[db_name if db_name else db_name_env]
-        self._collections: dict[DBCollections, Collection] = {x: self._database[x.value] for x in DBCollections}
+            self._set_up_indexes()
 
-        self._set_up_indexes()
+            _MONGO_CLIENT_INSTANCE = self.client
+            _DATABASE = self._database
+            _COLLECTIONS = self._collections
 
     def _set_up_indexes(self):
         self._collections[DBCollections.USER].create_index([
@@ -205,12 +215,11 @@ class MyMongoInstance:
         # First, find index
         query = self._user_query(target_task_id.username)
         tasks: List[Task] = query[UserCollectionAttrs.TASKS.value]
-        print(tasks)
-        # TODO magic
-        index = [x["apscheduler_id"] == str(target_task_id) for x in tasks].index(True)
+        # TODO magic?
+        index = [x["apscheduler_id"] == list(target_task_id) for x in tasks].index(True)
 
         # Then, update it with current time
-        # TODO magic
+        # TODO magic?
         self._collections[DBCollections.USER].update_one(
             {UserCollectionAttrs.USERNAME.value: target_task_id.username},
             {"$set": {f"tasks.{index}.last_success_time": datetime.now()}}
@@ -220,7 +229,3 @@ class MyMongoInstance:
 
     def task_remove(self):
         pass
-
-
-def static_get_mongo_instance() -> Union[None, MyMongoInstance]:
-    return _MONGO_CLIENT_INSTANCE
