@@ -15,6 +15,8 @@ import util.credential_helper as credential_helper
 
 dotenv.load_dotenv()
 
+_MONGO_CLIENT_INSTANCE = None
+
 
 @unique
 class DBCollections(Enum):
@@ -64,13 +66,18 @@ class MyMongoInstance:
     """
     def __init__(self, db_name: str = None):
         user, password, host, db_name_env, db_use_srv = read_env()
-        if db_use_srv:
-            self._client = pymongo.MongoClient(f"mongodb+srv://{user}:{password}@{host}/"
-                                               f"?retryWrites=true&w=majority")
+
+        if _MONGO_CLIENT_INSTANCE:
+            self.client = _MONGO_CLIENT_INSTANCE
         else:
-            self._client = pymongo.MongoClient(f"mongodb://{user}:{password}@{host}/"
-                                               f"?retryWrites=true&w=majority")
-        self._database: Database = self._client[db_name if db_name else db_name_env]
+            if db_use_srv:
+                self.client = pymongo.MongoClient(f"mongodb+srv://{user}:{password}@{host}/"
+                                                  f"?retryWrites=true&w=majority")
+            else:
+                self.client = pymongo.MongoClient(f"mongodb://{user}:{password}@{host}/"
+                                                  f"?retryWrites=true&w=majority")
+
+        self._database: Database = self.client[db_name if db_name else db_name_env]
         self._collections: dict[DBCollections, Collection] = {x: self._database[x.value] for x in DBCollections}
 
         self._set_up_indexes()
