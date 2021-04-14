@@ -1,2 +1,2 @@
-pylint checkin_scripts test util api_message.py checkin_template.py main.py \
+pylint checkin_misc checkin_tasks test util api_message.py main.py \
   --max-line-length=120

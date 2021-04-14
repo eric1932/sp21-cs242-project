@@ -32,13 +32,19 @@ class LoginItem(BaseModel):
 
 @app.on_event("startup")
 async def startup_event():
+    """
+    Actions performed when FastAPI starts up.
+    :return:
+    """
     sched.api_startup()
     print("My Startup")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    # TODO stop scheduler
+    """
+    Actions performed when FastAPI goes down.
+    """
     sched.api_shutdown()
     print("My Shutdown")
 
@@ -102,6 +108,7 @@ async def sign_in(name: str):
 async def user_show_task(token: Optional[str] = Header(None)):
     username = mongo.token_to_username(token)
     if username:
+        # TODO pretty
         return mongo.task_list(username)
     else:
         return resp_404_invalid_token
@@ -128,7 +135,7 @@ async def user_add_task(template: str,
         # TODO update last success time
 
         # mongo user info update
-        mongo.task_add(username, task)
+        mongo.task_add_to_user(username, task)
 
         # scheduler adding task
         sched.add_task(period, task_id)
@@ -143,7 +150,9 @@ async def user_remove_task(task_id_str: str,
                            token: Optional[str] = Header(None)):
     username = mongo.token_to_username(token)
     if username:
-        if mongo.task_remove(task_id_str, scheduler=sched.SCHEDULER):
+        if mongo.task_remove_from_user(task_id_str):
+            # remove from scheduler
+            sched.SCHEDULER.remove_job(task_id_str)
             return {"status", "success"}
         else:
             return {"status": "fail", "error": "cannot find task"}

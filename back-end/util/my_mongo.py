@@ -210,15 +210,30 @@ class MyMongoInstance:
         return [x["apscheduler_id"] == target_task_id for x in tasks].index(True)
 
     def task_list(self, username: str) -> List[Task]:
+        """
+        Get tasks given a username.
+        :param username: username
+        :return: list of tasks
+        """
         query = self._user_query(username)
         return query[UserCollectionAttrs.TASKS.value]
 
-    def task_add(self, username: str, task: Task):
+    def task_add_to_user(self, username: str, task: Task):
+        """
+        Add a task item for a user
+        :param username: username
+        :param task: Task item
+        """
         self._user_update_one(username, PymongoUpdateActions.PUSH, {
             UserCollectionAttrs.TASKS.value: task
         })
 
     def task_update_last_success_time(self, target_task_id: Union[TaskID, str]) -> bool:
+        """
+        Update last_success_time of a Task to current time.
+        :param target_task_id: TaskID to find the Task
+        :return: True if success
+        """
         if isinstance(target_task_id, TaskID):
             target_task_id = list(target_task_id)
         else:
@@ -238,7 +253,12 @@ class MyMongoInstance:
         )
         return True
 
-    def task_remove(self, task_id_str: str, scheduler: BaseScheduler) -> bool:
+    def task_remove_from_user(self, task_id_str: str) -> bool:
+        """
+        Remove a task from user/tasks
+        :param task_id_str: TaskID as str
+        :return: True if success
+        """
         task_id = task_id_str.split('-')
         try:
             index = self._task_find_index(task_id)
@@ -253,6 +273,4 @@ class MyMongoInstance:
             {UserCollectionAttrs.USERNAME.value: task_id[0]},
             {"$pull": {f"tasks": None}}
         )
-        # remove from scheduler
-        scheduler.remove_job(task_id_str)
         return True
