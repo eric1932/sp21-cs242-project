@@ -4,7 +4,7 @@ from types import ModuleType
 from util.types import TaskID
 
 
-def execute(task_id: TaskID):
+def execute(task_id: TaskID):  # pragma: no cover
     """
     Executing wrapper of checkin_tasks
     :param task_id: TaskID

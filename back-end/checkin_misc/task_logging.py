@@ -9,7 +9,7 @@ while (dir_name := os.path.split(FULL_PREFIX)[1]) and dir_name != ROOT_DIR_NAME:
     FULL_PREFIX = os.path.split(FULL_PREFIX)[0]
 FULL_LOG_PATH = os.path.join(FULL_PREFIX, LOG_DIR_NAME)
 if not os.path.exists(FULL_LOG_PATH):
-    os.mkdir(FULL_LOG_PATH)
+    os.mkdir(FULL_LOG_PATH)  # pragma: no cover
 
 logger_dict = {}
 
