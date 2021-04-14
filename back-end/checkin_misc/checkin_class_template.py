@@ -5,6 +5,7 @@ import abc
 from typing import Union
 
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 
 from checkin_misc.task_logging import get_module_logger
 
@@ -28,19 +29,32 @@ class CheckinTemplate:
         self.logger = get_module_logger(module_name)
 
     # notTODO make private
-    def get_driver(self, headless: bool = True) -> Union[webdriver.Chrome, webdriver.Firefox]:
+    def get_driver(self, headless: bool = True, eager: bool = False) -> Union[webdriver.Chrome, webdriver.Firefox]:
         """
         Get selenium driver
         :param headless: run in background. Required by headless machine. Default: True
+        :param eager: load page eagerly (ref: https://stackoverflow.com/a/46339092/8448191)
         :return: webdriver
         """
         if self.use_chromedriver:
             options = webdriver.ChromeOptions()
             options.headless = headless
-            return webdriver.Chrome(options=options)
+
+            caps = DesiredCapabilities().CHROME
+            if eager:
+                caps["pageLoadStrategy"] = "eager"
+
+            return webdriver.Chrome(
+                options=options,
+                desired_capabilities=caps
+            )
         else:
             # use GeckoDriver
             # notTODO
+            caps = DesiredCapabilities().FIREFOX
+            if eager:
+                caps["pageLoadStrategy"] = "eager"
+
             return webdriver.Firefox()
 
     @abc.abstractmethod
