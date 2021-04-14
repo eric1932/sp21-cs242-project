@@ -7,5 +7,7 @@ class WorkFlow(CheckinTemplate):
 
     @log
     def exec(self):
-        print("dummy work")
+        print("---")
+        print("dummy work execution")
+        print("---")
         return "success"

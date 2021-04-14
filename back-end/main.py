@@ -86,6 +86,7 @@ async def sign_in(name: str):
     :param name: sign_in script name
     :return: some info related to this sign_in
     """
+    # todo integrate with scheduler & reschedule job & update last success time
     if os.getcwd().endswith("test"):
         os.chdir("..")
     exist = (name + ".py") in os.listdir("checkin_tasks")
