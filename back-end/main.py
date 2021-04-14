@@ -114,7 +114,7 @@ async def user_add_task(template: str,
     username = mongo.token_to_username(token)
     if username:
         iter_num = sched.find_job_available_id(username, template)
-        task_id = TaskID(username=username, template=template, num=iter_num)
+        task_id = TaskID(username=username, template=template, num=str(iter_num))
 
         task: Task = {
             "template": template,
