@@ -79,17 +79,6 @@ async def logout(username: str, token: Optional[str] = Header(None), full_logout
     return resp_401_logout_fail
 
 
-# notTODO remove
-@app.get("/show/{token}")
-async def show_user_with_token(token: str):
-    """
-    Translate token into username
-    :param token: some token
-    :return: username
-    """
-    return mongo.token_to_username(token)
-
-
 @app.get("/sign_in/{name}")
 async def sign_in(name: str):
     """
