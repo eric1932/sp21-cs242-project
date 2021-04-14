@@ -20,8 +20,11 @@ def get_module_logger(module_name: str) -> logging.Logger:
         return logger_dict[module_name][0]
     else:
         _logger = logging.getLogger(module_name)
+        _formatter = logging.Formatter('%(asctime)s,%(levelname)-12s:%(message)s')
         file_handler = logging.FileHandler(f"{os.path.join(FULL_LOG_PATH, module_name)}.log")
+        file_handler.setFormatter(_formatter)
         console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(_formatter)
         _logger.addHandler(file_handler)
         _logger.addHandler(console_handler)
 
