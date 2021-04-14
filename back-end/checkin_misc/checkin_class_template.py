@@ -6,7 +6,7 @@ from typing import Union
 
 from selenium import webdriver
 
-from checkin_misc.task_logger import get_module_logger
+from checkin_misc.task_logging import get_module_logger
 
 
 def log(func):
