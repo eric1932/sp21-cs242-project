@@ -37,8 +37,6 @@ def event_listener(event: JobExecutionEvent):  # pragma: no cover
 
 
 def api_startup():  # pragma: no cover
-    print(MongoDBJobStore(database=os.getenv("DB_NAME"), collection="checkinJob",
-                          client=MyMongoInstance().client).get_all_jobs())
     SCHEDULER.start()
     # SCHEDULER.resume()
 

@@ -37,7 +37,6 @@ async def startup_event():  # pragma: no cover
     :return:
     """
     sched.api_startup()
-    print("My Startup")
 
 
 @app.on_event("shutdown")
@@ -46,7 +45,6 @@ async def shutdown_event():  # pragma: no cover
     Actions performed when FastAPI goes down.
     """
     sched.api_shutdown()
-    print("My Shutdown")
 
 
 @app.get("/")
