@@ -86,7 +86,7 @@ I believe most of the tasks are deliberately designed by internet companies to k
 | Category | Total Score Allocated | Detailed Rubrics                              |
 |-----------|:---------:|-------------------------------------------------------------------------------|
 | Set up FastAPI | 1 | 0: Didn't implement anything <br> 1: FastAPI listen on port `8000` and can handle requests like `login` and `logout` |
-| Set up MongoDB | 1 | 0: None <br> 1: MongoDB can be accessed from API server
+| Set up MongoDB | 1 | 0: None <br> 1: MongoDB can be accessed from API server |
 | UMS | 5 | +1 for inserting a user into database <br> +1 for successfully logging in with password <br> +2 for using a token to represent a user <br> +1 for logout & invalidate token |
 | Script execution | 4 | +2 for implementing a Template class <br> +2 for executing scripts from API |
 | pylint | 2 | +1 for using pylint and appropriate rules <br> +1 if score >= 0.9 |
