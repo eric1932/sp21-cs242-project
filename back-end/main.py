@@ -1,18 +1,27 @@
 """
 The main api server. Manage users and exec tasks periodically.
 """
+import datetime
 import os
 from typing import Optional
 
 from fastapi import FastAPI, Header
 from pydantic import BaseModel
 
-from api_message import resp_401_logout_fail, resp_200_logout_success, resp_403_password_mismatch
+import checkin_misc.periodic_task_scheduler as sched
+from api_message import resp_200_logout_success
+from api_message import resp_401_logout_fail
+from api_message import resp_403_password_mismatch
+from api_message import resp_404_invalid_token
+from checkin_misc.task_id import TaskID
 from util.my_mongo import MyMongoInstance
+from util.types import Task
 
 app = FastAPI()
 mongo = MyMongoInstance()
 
+
+# TODO fastapi_logging
 
 class LoginItem(BaseModel):
     """
@@ -20,6 +29,19 @@ class LoginItem(BaseModel):
     """
     username: str
     password: str
+
+
+@app.on_event("startup")
+async def startup_event():
+    sched.api_startup()
+    print("My Startup")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    # TODO stop scheduler
+    sched.api_shutdown()
+    print("My Shutdown")
 
 
 @app.get("/")
@@ -58,6 +80,7 @@ async def logout(username: str, token: Optional[str] = Header(None), full_logout
     return resp_401_logout_fail
 
 
+# notTODO remove
 @app.get("/show/{token}")
 async def show_user_with_token(token: str):
     """
@@ -84,3 +107,48 @@ async def sign_in(name: str):
     exec(f"from checkin_tasks.{name} import Workflow", globals())
     exec("url[0] = Workflow().exec()", globals(), locals())
     return url[0]
+
+
+@app.get("/task")
+async def user_show_task(token: Optional[str] = Header(None)):
+    username = mongo.token_to_username(token)
+    if username:
+        return mongo.task_list(username)
+    else:
+        return resp_404_invalid_token
+
+
+@app.get("/task/add/{template}")
+async def user_add_task(template: str,
+                        period: int = 3600 * 24,  # default = 1 day
+                        note: str = "",
+                        token: Optional[str] = Header(None)):
+    username = mongo.token_to_username(token)
+    if username:
+        iter_num = sched.find_job_available_id(username, template)
+        task_id = TaskID(username=username, template=template, num=iter_num)
+
+        task: Task = {
+            "template": template,
+            "period": period,
+            "note": note,
+            "last_success_time": datetime.datetime.min,  # oldest time
+            "created_at": datetime.datetime.now(),
+            "apscheduler_id": task_id
+        }
+        # TODO update last success time
+
+        # mongo user info update
+        mongo.task_add(username, task)
+
+        # scheduler adding task
+        sched.add_task(period, task_id, mongo)
+
+        return {"status": "success", "task": task}
+    else:
+        return resp_404_invalid_token
+
+
+@app.get("/task/remove")
+async def user_remove_task():
+    pass

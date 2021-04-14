@@ -2,7 +2,9 @@
 MongoDB manager for this project. Connect & manipulate values.
 """
 import os
+from datetime import datetime
 from enum import Enum, unique
+from typing import List
 from typing import Tuple
 from typing import Union
 
@@ -12,6 +14,8 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 
 import util.credential_helper as credential_helper
+from checkin_misc.task_id import TaskID
+from util.types import Task
 
 dotenv.load_dotenv()
 
@@ -24,7 +28,7 @@ class DBCollections(Enum):
     Which DBs are used should be written down here
     """
     USER = "user"
-    TOKENTOUSER = "tokenToUser"
+    TOKEN_TO_USER = "tokenToUser"
 
 
 @unique
@@ -35,6 +39,7 @@ class UserCollectionAttrs(Enum):
     USERNAME = "username"
     PASSWORD = "password"
     TOKENS = "tokens"
+    TASKS = "tasks"
 
 
 @unique
@@ -86,7 +91,7 @@ class MyMongoInstance:
         self._collections[DBCollections.USER].create_index([
             (UserCollectionAttrs.USERNAME.value, pymongo.ASCENDING)
         ], unique=True)
-        self._collections[DBCollections.TOKENTOUSER].create_index([
+        self._collections[DBCollections.TOKEN_TO_USER].create_index([
             ("token", pymongo.ASCENDING)
         ], unique=True)
 
@@ -119,7 +124,8 @@ class MyMongoInstance:
         self._collections[DBCollections.USER].insert_one({
             UserCollectionAttrs.USERNAME.value: username,
             UserCollectionAttrs.PASSWORD.value: credential_helper.hash_password(pw_raw),
-            UserCollectionAttrs.TOKENS.value: []
+            UserCollectionAttrs.TOKENS.value: [],
+            UserCollectionAttrs.TASKS.value: []
         })
 
     def user_update(self, username: str, new_pw_raw: str):
@@ -149,7 +155,7 @@ class MyMongoInstance:
             self._user_update_one(username, PymongoUpdateActions.PUSH, {
                 UserCollectionAttrs.TOKENS.value: token
             })
-            self._collections[DBCollections.TOKENTOUSER].update_one(
+            self._collections[DBCollections.TOKEN_TO_USER].update_one(
                 {"token": token},
                 {"$set": {"username": username}},
                 upsert=True
@@ -184,5 +190,34 @@ class MyMongoInstance:
         :param token: token
         :return: username
         """
-        query = self._collections[DBCollections.TOKENTOUSER].find_one({"token": token})
-        return query["username"] if query else None
+        query = self._collections[DBCollections.TOKEN_TO_USER].find_one({"token": token})
+        return query[UserCollectionAttrs.USERNAME.value] if query else None
+
+    def task_list(self, username: str) -> List[Task]:
+        query = self._user_query(username)
+        return query[UserCollectionAttrs.TASKS.value]
+
+    def task_add(self, username: str, task: Task):
+        self._user_update_one(username, PymongoUpdateActions.PUSH, {
+            UserCollectionAttrs.TASKS.value: task
+        })
+
+    def task_update_last_success_time(self, target_task_id: TaskID):
+        # First, find index
+        query = self._user_query(target_task_id.username)
+        tasks: List[Task] = query[UserCollectionAttrs.TASKS.value]
+        print(tasks)
+        # TODO magic
+        index = [x["apscheduler_id"] == str(target_task_id) for x in tasks].index(True)
+
+        # Then, update it with current time
+        # TODO magic
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: target_task_id.username},
+            {"$set": {f"tasks.{index}.last_success_time": datetime.now()}}
+        )
+
+        return True
+
+    def task_remove(self):
+        pass
