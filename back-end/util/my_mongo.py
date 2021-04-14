@@ -211,21 +211,23 @@ class MyMongoInstance:
             UserCollectionAttrs.TASKS.value: task
         })
 
-    def task_update_last_success_time(self, target_task_id: TaskID):
+    def task_update_last_success_time(self, target_task_id: Union[TaskID, str]):
+        if isinstance(target_task_id, TaskID):
+            target_task_id = list(target_task_id)
+        else:
+            target_task_id = target_task_id.split('-')
         # First, find index
-        query = self._user_query(target_task_id.username)
+        query = self._user_query(target_task_id[0])
         tasks: List[Task] = query[UserCollectionAttrs.TASKS.value]
         # TODO magic?
-        index = [x["apscheduler_id"] == list(target_task_id) for x in tasks].index(True)
+        index = [x["apscheduler_id"] == target_task_id for x in tasks].index(True)
 
         # Then, update it with current time
         # TODO magic?
         self._collections[DBCollections.USER].update_one(
-            {UserCollectionAttrs.USERNAME.value: target_task_id.username},
+            {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
             {"$set": {f"tasks.{index}.last_success_time": datetime.now()}}
         )
 
-        return True
-
-    def task_remove(self):
+    def task_remove(self, task_id_str: str):
         pass

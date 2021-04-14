@@ -33,9 +33,7 @@ SCHEDULER = BackgroundScheduler(jobstores=_job_stores, job_defaults=_job_default
 
 def event_listener(event: JobExecutionEvent):
     # update last_success_time
-    split = event.job_id.split("-")
-    task_id = TaskID(username=split[0], template=split[1], num=split[2])
-    mongo.task_update_last_success_time(task_id)
+    mongo.task_update_last_success_time(event.job_id)
 
 
 def api_startup():
