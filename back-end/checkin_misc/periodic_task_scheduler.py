@@ -8,7 +8,7 @@ from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from checkin_misc import task_exec_wrapper
-from checkin_misc.task_id import TaskID
+from util.types import TaskID
 from util.my_mongo import MyMongoInstance
 
 # set up scheduler
@@ -51,9 +51,9 @@ def find_job_available_id(username: str, template: str):
     return iter_num
 
 
-def add_task(period: int, task_id: TaskID, mongo: MyMongoInstance):
+def add_task(period: int, task_id: TaskID):
     SCHEDULER.add_job(task_exec_wrapper.execute, trigger='interval',
-                      kwargs={"task_id": task_id, "mongo": mongo},
+                      kwargs={"task_id": task_id},
                       seconds=period,
                       next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=10),
                       id=str(task_id))

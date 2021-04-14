@@ -14,8 +14,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 
 import util.credential_helper as credential_helper
-from checkin_misc.task_id import TaskID
-from util.types import Task
+from util.types import Task, TaskID
 
 dotenv.load_dotenv()
 
@@ -221,3 +220,7 @@ class MyMongoInstance:
 
     def task_remove(self):
         pass
+
+
+def static_get_mongo_instance() -> Union[None, MyMongoInstance]:
+    return _MONGO_CLIENT_INSTANCE

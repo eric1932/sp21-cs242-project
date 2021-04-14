@@ -13,9 +13,8 @@ from api_message import resp_200_logout_success
 from api_message import resp_401_logout_fail
 from api_message import resp_403_password_mismatch
 from api_message import resp_404_invalid_token
-from checkin_misc.task_id import TaskID
 from util.my_mongo import MyMongoInstance
-from util.types import Task
+from util.types import Task, TaskID
 
 app = FastAPI()
 mongo = MyMongoInstance()
@@ -142,7 +141,7 @@ async def user_add_task(template: str,
         mongo.task_add(username, task)
 
         # scheduler adding task
-        sched.add_task(period, task_id, mongo)
+        sched.add_task(period, task_id)
 
         return {"status": "success", "task": task}
     else:

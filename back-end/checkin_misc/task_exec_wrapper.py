@@ -1,11 +1,11 @@
 import importlib
 from types import ModuleType
 
-from checkin_misc.task_id import TaskID
-from util.my_mongo import MyMongoInstance
+from util.types import TaskID
+from util.my_mongo import static_get_mongo_instance
 
 
-def execute(task_id: TaskID, mongo: MyMongoInstance):
+def execute(task_id: TaskID):
     """
     Executing wrapper of checkin_tasks
     :param task_id: TaskID
@@ -16,6 +16,6 @@ def execute(task_id: TaskID, mongo: MyMongoInstance):
     try:
         task.WorkFlow().exec()
         # update last_success_time
-        mongo.task_update_last_success_time(task_id)
+        static_get_mongo_instance().task_update_last_success_time(task_id)
     except:
         pass

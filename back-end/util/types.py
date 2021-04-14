@@ -1,7 +1,11 @@
 from datetime import datetime
-from typing import TypedDict
+from typing import TypedDict, NamedTuple
 
-from checkin_misc.task_id import TaskID
+
+class TaskID(NamedTuple):
+    username: str
+    template: str
+    num: int
 
 
 class Task(TypedDict):
