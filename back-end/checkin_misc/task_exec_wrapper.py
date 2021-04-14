@@ -10,4 +10,4 @@ def execute(task_id: TaskID):
     :param task_id: TaskID
     """
     task: ModuleType = importlib.import_module(f"checkin_tasks.{task_id.template}")
-    task.WorkFlow().exec()
+    task.Workflow().exec()
