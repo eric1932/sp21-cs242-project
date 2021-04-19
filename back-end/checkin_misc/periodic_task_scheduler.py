@@ -51,7 +51,7 @@ def find_job_available_id(username: str, template: str):
     iter_num = 0
     # compose
     while True:
-        task_id = f"{username}-{template}-{iter_num}"
+        task_id = f"{username}-{template}-{iter_num}"  # TODO uuid
         if not SCHEDULER.get_job(task_id):
             break
         else:

@@ -10,4 +10,7 @@ def execute(task_id: TaskID):  # pragma: no cover
     :param task_id: TaskID
     """
     task: ModuleType = importlib.import_module(f"checkin_tasks.{task_id.template}")
-    task.Workflow().exec()
+    try:
+        task.Workflow().exec()
+    except:
+        pass

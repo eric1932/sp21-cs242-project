@@ -97,7 +97,7 @@ async def sign_in(name: str):
     if not exist:
         return "script not exist"
     url = [""]
-    exec(f"from checkin_tasks.{name} import Workflow", globals())
+    exec(f"from checkin_tasks.{name} import Workflow", globals())  # TODO remove
     exec("url[0] = Workflow().exec()", globals(), locals())
     return url[0]
 
@@ -119,7 +119,7 @@ async def user_add_task(template: str,
                         token: Optional[str] = Header(None)):
     username = mongo.token_to_username(token)
     if username:
-        iter_num = sched.find_job_available_id(username, template)
+        iter_num = sched.find_job_available_id(username, template)  # TODO async
         task_id = TaskID(username=username, template=template, num=str(iter_num))
 
         task: Task = {
