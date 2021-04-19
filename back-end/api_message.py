@@ -15,3 +15,6 @@ resp_200_logout_success = JSONResponse(status_code=status.HTTP_200_OK,
 
 resp_401_logout_fail = JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                                     content={"error": "invalid token to logout"})
+
+resp_404_invalid_token = JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                                      content={"error": "invalid token"})

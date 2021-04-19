@@ -1,5 +1,6 @@
 import _thread
 import unittest
+from typing import List
 
 import uvicorn
 from fastapi.testclient import TestClient
@@ -28,13 +29,38 @@ class MyTestCase(unittest.TestCase):
         response = client.get("/logout/user", headers={"token": "invalid"})
         self.assertEqual(401, response.status_code)
 
-    def test_show_user_with_token_invalid(self):
-        response = client.get("/show/invalid")
-        self.assertEqual("null", response.text)
-
     def test_sign_in(self):
-        response = client.get("/sign_in/google_weather")
-        self.assertTrue("google.com/images" in response.text)
+        response = client.get("/sign_in/dummy_bg_task")
+        self.assertEqual("\"success\"", response.text)
+
+    def test_task_list(self):
+        resp = client.get("/task", headers={"token": "084b3e7ab8a28c17e990fcf7e0268c10"})
+        self.assertTrue(isinstance(resp.json(), list))
+
+    def test_task_list_invalid(self):
+        resp = client.get("/task", headers={"token": "invalid"})
+        self.assertEqual(404, resp.status_code)
+
+    def test_task_add_remove_dummy(self):
+        resp = client.get("/task/add/dummy_bg_task?note=test", headers={"token": "084b3e7ab8a28c17e990fcf7e0268c10"})
+        self.assertTrue("task" in resp.json())
+        self.assertTrue("apscheduler_id" in resp.json()["task"])
+        self.assertEqual("test", resp.json()["task"]["note"])
+        task_id: List = resp.json()["task"]["apscheduler_id"]
+        resp = client.get(f"/task/remove/{'-'.join(task_id)}", headers={"token": "084b3e7ab8a28c17e990fcf7e0268c10"})
+        self.assertEqual({"status": "success"}, resp.json())
+
+    def test_task_add_invalid(self):
+        resp = client.get("/task/add/dummy_bg_task?note=test", headers={"token": "invalid"})
+        self.assertEqual(404, resp.status_code)
+
+    def test_task_remove_invalid_token(self):
+        resp = client.get("/task/remove/invalid", headers={"token": "invalid"})
+        self.assertEqual(404, resp.status_code)
+
+    def test_task_remove_invalid_task(self):
+        resp = client.get("/task/remove/invalid", headers={"token": "084b3e7ab8a28c17e990fcf7e0268c10"})
+        self.assertEqual("fail", resp.json()["status"])
 
 
 if __name__ == '__main__':
