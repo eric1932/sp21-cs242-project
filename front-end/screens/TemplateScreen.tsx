@@ -2,7 +2,7 @@ import * as React from 'react';
 import {StyleSheet, TouchableHighlight} from 'react-native';
 import {View} from '../components/Themed';
 import {getTemplateList} from "../utils/API";
-import MyProfileItem from "../components/MyProfileItem";
+import ListItem from "../components/ListItem";
 import {Entypo} from "@expo/vector-icons";
 
 export default function TaskScreen() {
@@ -17,7 +17,7 @@ export default function TaskScreen() {
   return (
     <View style={styles.container}>
       {templateList.map((eachTemplate: string) => (
-        <MyProfileItem key={eachTemplate} name={eachTemplate} value={(
+        <ListItem key={eachTemplate} name={eachTemplate} value={(
           <TouchableHighlight onPress={() => {
             console.warn('asdf')
           }}>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Button, ScrollView, StyleSheet} from 'react-native';
 import {View} from '../components/Themed';
 import {getToken, removeToken} from "../utils/Storage";
-import MyProfileItem from "../components/MyProfileItem";
+import ListItem from "../components/ListItem";
 import {MyProfileProps} from "../types";
 import {logoutUser} from "../utils/API";
 
@@ -20,7 +20,7 @@ export default function MyProfileScreen(props: MyProfileProps) {
   return (
     <View style={styles.container}>
       <ScrollView style={{width: '65%'}}>
-        <MyProfileItem name={"token"} value={token} />
+        <ListItem name={"token"} value={token} />
         <View style={[styles.listButtonWrapper, {paddingTop: 40}]}>
           <Button title={"logout save token"} onPress={async () => {
             // remove token
