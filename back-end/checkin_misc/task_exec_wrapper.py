@@ -12,5 +12,5 @@ def execute(task_id: TaskID):  # pragma: no cover
     task: ModuleType = importlib.import_module(f"checkin_tasks.{task_id.template}")
     try:
         task.Workflow().exec()
-    except:
-        pass
+    except Exception as e:
+        raise RuntimeError("Job Execution Failed") from e

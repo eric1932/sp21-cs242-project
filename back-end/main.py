@@ -14,7 +14,7 @@ from api_message import resp_401_logout_fail
 from api_message import resp_403_password_mismatch
 from api_message import resp_404_invalid_token
 from util.my_mongo import MyMongoInstance
-from util.types import Task, TaskID
+from util.types import Task, TaskID, TaskStatus
 
 app = FastAPI()
 mongo = MyMongoInstance()
@@ -128,7 +128,8 @@ async def user_add_task(template: str,
             "note": note,
             "last_success_time": datetime.datetime.min,  # oldest time
             "created_at": datetime.datetime.now(),
-            "apscheduler_id": task_id
+            "apscheduler_id": task_id,
+            "status": TaskStatus.FIRST_RUN
         }
         # TODO update last success time
 

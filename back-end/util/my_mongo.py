@@ -15,7 +15,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 
 import util.credential_helper as credential_helper
-from util.types import Task, TaskID
+from util.types import Task, TaskID, TaskStatus
 
 dotenv.load_dotenv()
 
@@ -230,7 +230,7 @@ class MyMongoInstance:
             UserCollectionAttrs.TASKS.value: task
         })
 
-    def task_update_last_success_time(self, target_task_id: Union[TaskID, str]) -> bool:
+    def task_update_last_success_time_and_set_status_to_success(self, target_task_id: Union[TaskID, str]) -> bool:
         """
         Update last_success_time of a Task to current time.
         :param target_task_id: TaskID to find the Task
@@ -246,12 +246,38 @@ class MyMongoInstance:
             index = self._task_find_index(target_task_id)
         except ValueError:
             return False
+        if index == -1:
+            return False
 
         # Then, update it with current time
         # TODO magic?
         self._collections[DBCollections.USER].update_one(
             {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
             {"$set": {f"tasks.{index}.last_success_time": datetime.now()}}
+        )
+        # Finally, set status
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
+            {"$set": {f"tasks.{index}.status": TaskStatus.SUCCESS}}
+        )
+        return True
+
+    def task_set_status_to_err(self, target_task_id: Union[TaskID, str]) -> bool:
+        if isinstance(target_task_id, TaskID):
+            target_task_id = list(target_task_id)
+        else:
+            target_task_id = target_task_id.split('-')
+
+        try:
+            index = self._task_find_index(target_task_id)
+        except ValueError:
+            return False
+        if index == -1:
+            return False
+
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
+            {"$set": {f"tasks.{index}.status": TaskStatus.ERROR}}
         )
         return True
 
