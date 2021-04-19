@@ -12,7 +12,7 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   TabOne: undefined;
-  TabTwo: undefined;
+  My: undefined;
 };
 
 export type TabOneParamList = {
@@ -20,10 +20,15 @@ export type TabOneParamList = {
 };
 
 export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  My: undefined;
 };
 
 export type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 export type LoginProps = {
   navigation: LoginScreenNavigationProp
+}
+
+export type MyProfileItemProps = {
+  name: string,
+  value: string,
 }
