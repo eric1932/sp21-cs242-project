@@ -1,23 +1,35 @@
 import React from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {getToken, saveToken} from "../utils/Storage";
-import {validateUser} from "../utils/API";
+import {validateUser, validateUserToken} from "../utils/API";
 import {LoginProps, LoginScreenNavigationProp} from "../types";
 
-function handleLogin(username: string, password: string, navigation: LoginScreenNavigationProp) {
-  return async () => {
-    let result: string | null = await validateUser(username, password)
-    if (result) {
-      await saveToken(result);
-      navigation.replace('Root')
-    }
-  };
+function handleLogin(useTokenLogin: boolean, username: string, password: string, token: string, navigation: LoginScreenNavigationProp) {
+  if (useTokenLogin) {
+    return async () => {
+      let result: boolean = await validateUserToken(token)
+      if (result) {
+        await saveToken(token);
+        navigation.replace('Root')
+      }
+    };
+  } else {
+    return async () => {
+      let result: string | null = await validateUser(username, password)
+      if (result) {
+        await saveToken(result);
+        navigation.replace('Root')
+      }
+    };
+  }
 }
 
 // ref: https://github.com/Alhydra/React-Native-Login-Screen-Tutorial
 export default function LoginScreen({navigation}: LoginProps) {
+  let [useTokenLogin, setTokenLogin] = React.useState(false)
   let [username, setUsername] = React.useState('')
   let [password, setPassword] = React.useState('')
+  let [token, setToken] = React.useState('')
 
   React.useEffect(() => {
     getToken().then(token => {
@@ -30,27 +42,37 @@ export default function LoginScreen({navigation}: LoginProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>Daily Checkin</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Username"
-          placeholderTextColor="#003f5c"
-          onChangeText={text => setUsername(text)}/>
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          secureTextEntry
-          style={styles.inputText}
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          onChangeText={text => setPassword(text)}/>
-      </View>
-      {/*<TouchableOpacity>*/}
-      {/*  <Text style={styles.forgot}>Forgot Password?</Text>*/}
-      {/*</TouchableOpacity>*/}
+      {useTokenLogin
+        ? <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Token"
+            placeholderTextColor="#003f5c"
+            onChangeText={text => setToken(text)}/>
+        </View>
+        : <><View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Username"
+            placeholderTextColor="#003f5c"
+            onChangeText={text => setUsername(text)}/>
+        </View>
+          <View style={styles.inputView}>
+            <TextInput
+              secureTextEntry
+              style={styles.inputText}
+              placeholder="Password"
+              placeholderTextColor="#003f5c"
+              onChangeText={text => setPassword(text)}/>
+          </View></>}
+      <TouchableOpacity onPress={() => setTokenLogin(!useTokenLogin)}>
+        {useTokenLogin
+          ? <Text style={styles.forgot}>use username and password</Text>
+          : <Text style={styles.forgot}>or use token to login</Text>}
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.loginBtn}
-        onPress={handleLogin(username, password, navigation)}>
+        onPress={handleLogin(useTokenLogin, username, password, token, navigation)}>
         <Text
           style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
