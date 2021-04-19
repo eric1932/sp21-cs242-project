@@ -22,7 +22,7 @@ export type TaskParamList = {
 };
 
 export type TemplateParamList = {
-  TemplateScreen: undefined;
+  Template: undefined;
 }
 
 export type MyProfileParamList = {
@@ -43,4 +43,9 @@ export type MyProfileItemProps = {
 export type MyProfileScreenNavigationProp = StackNavigationProp<MyProfileParamList, 'MyProfile'>
 export type MyProfileProps = {
   navigation: MyProfileScreenNavigationProp
+}
+
+export type TemplateScreenNavigationProp = StackNavigationProp<TemplateParamList, 'Template'>
+export type TemplateProps = {
+  navigation: TemplateScreenNavigationProp
 }

@@ -74,7 +74,7 @@ function TemplateNavigator() {
   return (
     <TemplateStack.Navigator>
       <TemplateStack.Screen
-        name="TemplateScreen"
+        name="Template"
         component={TemplateScreen}
         options={{headerTitle: 'Templates'}}
       />
