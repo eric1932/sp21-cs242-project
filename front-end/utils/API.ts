@@ -9,15 +9,13 @@ export async function validateUser(username: string, password: string): Promise<
     "password": password
   });
 
-  let requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: requestBody,
-    redirect: 'follow',
-  };
-
   try {
-    let response = await fetch(`${API_BASE_URL}/login`, requestOptions)
+    let response = await fetch(`${API_BASE_URL}/login`, {
+      method: 'POST',
+      headers: myHeaders,
+      body: requestBody,
+      redirect: 'follow',
+    })
     if (response.status == 403) {
       return null;
     }
