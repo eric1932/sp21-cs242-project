@@ -19,8 +19,9 @@ export type TabOneParamList = {
   TabOneScreen: undefined;
 };
 
-export type TabTwoParamList = {
+export type MyProfileParamList = {
   My: undefined;
+  Login: undefined;
 };
 
 export type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
@@ -31,4 +32,9 @@ export type LoginProps = {
 export type MyProfileItemProps = {
   name: string,
   value: string,
+}
+
+export type MyProfileScreenNavigationProp = StackNavigationProp<MyProfileParamList, 'My'>
+export type MyProfileProps = {
+  navigation: MyProfileScreenNavigationProp
 }

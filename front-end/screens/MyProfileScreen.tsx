@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {Button, ScrollView, StyleSheet} from 'react-native';
 import {View} from '../components/Themed';
-import {getToken} from "../utils/Storage";
+import {getToken, removeToken} from "../utils/Storage";
 import MyProfileItem from "../components/MyProfileItem";
+import {MyProfileProps} from "../types";
 
-export default function MyProfileScreen() {
+export default function MyProfileScreen(props: MyProfileProps) {
   let [token, setToken] = React.useState('')
 
   React.useEffect(() => {
@@ -19,7 +20,12 @@ export default function MyProfileScreen() {
     <View style={styles.container}>
       <ScrollView>
         <MyProfileItem name={"token"} value={token} />
-        <Button title={"logout"} onPress={() => {console.warn("logout")}} />
+        <Button title={"logout"} onPress={async () => {
+          // remove token
+          await removeToken()
+          // go back to login page
+          props.navigation.replace('Login')
+        }} />
       </ScrollView>
     </View>
   );

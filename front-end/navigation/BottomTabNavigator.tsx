@@ -12,7 +12,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import { BottomTabParamList, TabOneParamList, MyProfileParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -63,7 +63,7 @@ function TabOneNavigator() {
   );
 }
 
-const MyProfileStack = createStackNavigator<TabTwoParamList>();
+const MyProfileStack = createStackNavigator<MyProfileParamList>();
 
 function TabTwoNavigator() {
   return (
