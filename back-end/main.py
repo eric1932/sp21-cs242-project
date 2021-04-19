@@ -5,7 +5,9 @@ import datetime
 import os
 from typing import Optional, Union
 
-from fastapi import FastAPI, Header
+from fastapi import FastAPI
+from fastapi import Header
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 import checkin_misc.periodic_task_scheduler as sched
@@ -18,6 +20,14 @@ from util.types import Task, TaskID, TaskStatus
 
 app = FastAPI()
 mongo = MyMongoInstance()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # TODO fastapi_logging
