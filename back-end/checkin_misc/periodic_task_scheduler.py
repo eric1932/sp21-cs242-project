@@ -1,5 +1,6 @@
 import datetime
 import os
+from typing import Union
 
 import dotenv
 from apscheduler.events import EVENT_JOB_EXECUTED, JobExecutionEvent, EVENT_JOB_ERROR
@@ -64,9 +65,9 @@ def find_job_available_id(username: str, template: str):
     return iter_num
 
 
-def add_task(period: int, task_id: TaskID):
+def add_task(period: int, task_id: TaskID, cookies: Union[dict, str, None]):
     SCHEDULER.add_job(task_exec_wrapper.execute, trigger='interval',
-                      kwargs={"task_id": task_id},
+                      kwargs={"task_id": task_id, "cookies": cookies},
                       seconds=period,
                       next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=10),
                       id='-'.join(task_id))

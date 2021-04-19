@@ -13,7 +13,8 @@ from checkin_misc.task_logging import get_module_logger
 def log(func):
     def wrapper(self, *args, **kwargs):
         ret_val = func(self, *args, **kwargs)
-        self.logger.info(ret_val)
+        if ret_val:
+            self.logger.info(ret_val)
         return ret_val
 
     return wrapper
@@ -23,10 +24,11 @@ class CheckinTemplate:
     """
     The template class that will be used to construct checkin tasks
     """
-    def __init__(self, module_name, use_chromedriver: bool = True):
+    def __init__(self, module_name, use_chromedriver: bool = True, cookies: Union[dict, str, None] = None):
         self.module_name = module_name
         self.use_chromedriver = use_chromedriver
         self.logger = get_module_logger(module_name)
+        self.cookies = cookies
 
     # notTODO make private
     def get_driver(self, headless: bool = True, eager: bool = False) -> Union[webdriver.Chrome, webdriver.Firefox]:

@@ -3,7 +3,7 @@ The main api server. Manage users and exec tasks periodically.
 """
 import datetime
 import os
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import FastAPI, Header
 from pydantic import BaseModel
@@ -116,6 +116,7 @@ async def user_show_task(token: Optional[str] = Header(None)):
 async def user_add_task(template: str,
                         period: int = 3600 * 24,  # default = 1 day
                         note: str = "",
+                        cookies: Union[str, dict] = None,
                         token: Optional[str] = Header(None)):
     username = mongo.token_to_username(token)
     if username:
@@ -131,13 +132,12 @@ async def user_add_task(template: str,
             "apscheduler_id": task_id,
             "status": TaskStatus.FIRST_RUN
         }
-        # TODO update last success time
 
         # mongo user info update
         mongo.task_add_to_user(username, task)
 
         # scheduler adding task
-        sched.add_task(period, task_id)
+        sched.add_task(period, task_id, cookies)
 
         return {"status": "success", "task": task}
     else:
