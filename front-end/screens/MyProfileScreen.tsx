@@ -19,32 +19,38 @@ export default function MyProfileScreen(props: MyProfileProps) {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{width: '65%'}}>
         <MyProfileItem name={"token"} value={token} />
-        <Button title={"logout save token"} onPress={async () => {
-          // remove token
-          await removeToken()
-          // go back to login page
-          props.navigation.replace('Login')
-        }} />
-        <Button title={"logout clear token"} onPress={async () => {
-          let token = await getToken()
-          await removeToken()
-          props.navigation.replace('Login')
-          // clear token
-          if (token) {
-            await logoutUser(token, false)
-          }
-        }} />
-        <Button title={"logout everywhere"} onPress={async () => {
-          let token = await getToken()
-          await removeToken()
-          props.navigation.replace('Login')
-          // clear token all
-          if (token) {
-            await logoutUser(token, true)
-          }
-        }} />
+        <View style={[styles.listButtonWrapper, {paddingTop: 40}]}>
+          <Button title={"logout save token"} onPress={async () => {
+            // remove token
+            await removeToken()
+            // go back to login page
+            props.navigation.replace('Login')
+          }} />
+        </View>
+        <View style={styles.listButtonWrapper}>
+          <Button title={"logout clear token"} onPress={async () => {
+            let token = await getToken()
+            await removeToken()
+            props.navigation.replace('Login')
+            // clear token
+            if (token) {
+              await logoutUser(token, false)
+            }
+          }} />
+        </View>
+        <View style={styles.listButtonWrapper}>
+          <Button title={"logout everywhere"} onPress={async () => {
+            let token = await getToken()
+            await removeToken()
+            props.navigation.replace('Login')
+            // clear token all
+            if (token) {
+              await logoutUser(token, true)
+            }
+          }} />
+        </View>
       </ScrollView>
     </View>
   );
@@ -65,4 +71,10 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  listButtonWrapper: {
+    width: '50%',
+    paddingTop: 15,
+    position: 'relative',
+    left: '25%'
+  }
 });
