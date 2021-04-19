@@ -5,13 +5,14 @@ import {getTemplateList} from "../utils/API";
 import ListItem from "../components/ListItem";
 import {Entypo} from "@expo/vector-icons";
 import {getToken} from "../utils/Storage";
+import {API_BASE_URL} from "../constants/Networking";
 
 export default function TaskScreen() {
   let [templateList, setTemplateList] = React.useState<Array<string>>([])
   let [showNewPage, setShowNewPage] = React.useState(false)
   let [targetTemplateName, setTargetTemplateName] = React.useState('')
 
-  let [period, setPeriod] = React.useState('')
+  let [period, setPeriod] = React.useState('86400')
   let [note, setNote] = React.useState('')
   let [cookies, setCookies] = React.useState('')
 
@@ -26,13 +27,33 @@ export default function TaskScreen() {
       {showNewPage
         ? (<View style={{width: '60%'}}>
           <Text>Creating Task of {targetTemplateName}</Text>
-          <TextInput placeholder={'Period: default 1 day'} onChangeText={(text) => setPeriod(text)}/>
+          <TextInput placeholder={'Period (in secs): default 1 day'} onChangeText={(text) => {
+            if (text !== '')
+              setPeriod(text)  // TODO number only
+          }}/>
           <TextInput placeholder={'Note'} onChangeText={(text) => setNote(text)}/>
           <TextInput placeholder={'Cookies'} onChangeText={(text) => setCookies(text)}/>
           <Button title={'Create'} onPress={async () => {
             let token = await getToken()
-            console.warn(token)
-            // TODO api create task
+            let myHeaders = new Headers();
+            myHeaders.append("token", token === null ? '' : token);
+
+            try {
+              let response = await fetch(
+                `${API_BASE_URL}/task/add/${targetTemplateName}?period=${period}&note=${note}`, {
+                  method: 'GET',
+                  headers: myHeaders,
+                  redirect: 'follow'
+                })
+              if (response.status == 404) {
+                // fail
+              } else {
+                // success
+                console.warn(await response.json())
+              }
+            } catch (e) {
+              // fail
+            }
           }}/>
           <Button title={'Back'} onPress={() => {
             setShowNewPage(false)
