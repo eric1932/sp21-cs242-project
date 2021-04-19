@@ -1,5 +1,6 @@
 import {API_BASE_URL} from "../constants/Networking"
 
+
 export async function validateUser(username: string, password: string): Promise<string | null> {
   let myHeaders = new Headers()
   myHeaders.append("Content-Type", "application/json")
@@ -47,7 +48,7 @@ export async function validateUserToken(token: string): Promise<boolean> {
   return await tokenToUsername(token) !== null
 }
 
-export async function listTasks(token: string): Promise<any> {
+export async function listTasks(token: string): Promise<boolean> {
   let myHeaders = new Headers()
   myHeaders.append("token", token)
 
@@ -80,5 +81,17 @@ export async function logoutUser(token: string, fullLogout: boolean): Promise<bo
     return response.status === 200
   } catch (e) {
     return false
+  }
+}
+
+export async function getTemplateList(): Promise<[]> {
+  try {
+    let response = await fetch("http://127.0.0.1:8000/template/list", {
+      method: 'GET',
+      redirect: 'follow'
+    })
+    return await response.json()
+  } catch (e) {
+    return []
   }
 }

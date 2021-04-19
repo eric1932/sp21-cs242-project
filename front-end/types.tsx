@@ -3,6 +3,7 @@
  * https://reactnavigation.org/docs/typescript/
  */
 import {StackNavigationProp} from "@react-navigation/stack";
+import {Component, ReactElement} from "react";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -36,7 +37,7 @@ export type LoginProps = {
 
 export type MyProfileItemProps = {
   name: string,
-  value: string,
+  value: string | Component | ReactElement,
 }
 
 export type MyProfileScreenNavigationProp = StackNavigationProp<MyProfileParamList, 'MyProfile'>

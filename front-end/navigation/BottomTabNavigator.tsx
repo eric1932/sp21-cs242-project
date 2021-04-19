@@ -22,7 +22,7 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Tasks"
+      initialRouteName="Templates"
       tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
       <BottomTab.Screen
         name="Tasks"
