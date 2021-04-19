@@ -31,7 +31,8 @@ export default {
         screens: {
           LoginScreen: 'login'
         }
-      }
+      },
+      NotFound: '*',
     }
   },
 };
