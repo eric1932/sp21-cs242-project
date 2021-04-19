@@ -173,6 +173,9 @@ class MyMongoInstance:
             return token
         return None
 
+    def _remove_token_to_user(self, token: str):
+        self._collections[DBCollections.TOKEN_TO_USER].delete_one({"token": token})
+
     def user_logout(self, username: str, val_token: str, remove_all: bool = False) -> bool:
         """
         Logout a user and invalidate one/all tokens
@@ -184,13 +187,17 @@ class MyMongoInstance:
         query = self._user_query(username)
         if query and val_token in query[UserCollectionAttrs.TOKENS.value]:
             if remove_all:
+                tokens = query['tokens']
                 self._user_update_one(username, PymongoUpdateActions.SET, {
                     UserCollectionAttrs.TOKENS.value: []
                 })
+                for each_token in tokens:
+                    self._remove_token_to_user(each_token)
             else:
                 self._user_update_one(username, PymongoUpdateActions.PULL, {
                     UserCollectionAttrs.TOKENS.value: val_token
                 })
+                self._remove_token_to_user(val_token)
             return True
         return False
 
