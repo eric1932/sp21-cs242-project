@@ -3,16 +3,17 @@
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 
-import {Feather, Ionicons} from '@expo/vector-icons';
+import {AntDesign, Feather, FontAwesome5} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
+import TaskScreen from '../screens/TaskScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
-import {BottomTabParamList, TabOneParamList, MyProfileParamList} from '../types';
+import {BottomTabParamList, MyProfileParamList, TaskParamList, TemplateParamList} from '../types';
+import TemplateScreen from "../screens/TemplateScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -21,18 +22,25 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Tasks"
       tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Tasks"
+        component={TasksNavigator}
         options={{
-          tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,
+          tabBarIcon: ({color}) => <FontAwesome5 name="tasks" size={24} color={color}/>,
+        }}
+      />
+      <BottomTab.Screen
+        name="Templates"
+        component={TemplateNavigator}
+        options={{
+          tabBarIcon: ({color}) => <AntDesign name="plussquareo" size={24} color={color}/>,
         }}
       />
       <BottomTab.Screen
         name="My"
-        component={TabTwoNavigator}
+        component={MyProfileNavigator}
         options={{
           tabBarIcon: ({color}) => <Feather name="settings" size={24} color={color}/>,
         }}
@@ -43,33 +51,44 @@ export default function BottomTabNavigator() {
 
 // You can explore the built-in icon families and icons on the web at:
 // https://icons.expo.fyi/
-function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
-  return <Ionicons size={30} style={{marginBottom: -3}} {...props} />;
-}
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TaskStack = createStackNavigator<TaskParamList>();
 
-function TabOneNavigator() {
+function TasksNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{headerTitle: 'Tab One Title'}}
+    <TaskStack.Navigator>
+      <TaskStack.Screen
+        name="TaskScreen"
+        component={TaskScreen}
+        options={{headerTitle: 'Tasks'}}
       />
-    </TabOneStack.Navigator>
+    </TaskStack.Navigator>
   );
+}
+
+const TemplateStack = createStackNavigator<TemplateParamList>();
+
+function TemplateNavigator() {
+  return (
+    <TemplateStack.Navigator>
+      <TemplateStack.Screen
+        name="TemplateScreen"
+        component={TemplateScreen}
+        options={{headerTitle: 'Templates'}}
+      />
+    </TemplateStack.Navigator>
+  )
 }
 
 const MyProfileStack = createStackNavigator<MyProfileParamList>();
 
-function TabTwoNavigator() {
+function MyProfileNavigator() {
   return (
     <MyProfileStack.Navigator>
       <MyProfileStack.Screen
-        name="My"
+        name="MyProfile"
         component={MyProfileScreen}
         options={{headerTitle: 'My'}}
       />

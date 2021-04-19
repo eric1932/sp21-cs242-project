@@ -11,16 +11,21 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
+  Tasks: undefined;
+  Templates: undefined;
   My: undefined;
 };
 
-export type TabOneParamList = {
-  TabOneScreen: undefined;
+export type TaskParamList = {
+  TaskScreen: undefined;
 };
+
+export type TemplateParamList = {
+  TemplateScreen: undefined;
+}
 
 export type MyProfileParamList = {
-  My: undefined;
+  MyProfile: undefined;
   Login: undefined;
 };
 
@@ -34,7 +39,7 @@ export type MyProfileItemProps = {
   value: string,
 }
 
-export type MyProfileScreenNavigationProp = StackNavigationProp<MyProfileParamList, 'My'>
+export type MyProfileScreenNavigationProp = StackNavigationProp<MyProfileParamList, 'MyProfile'>
 export type MyProfileProps = {
   navigation: MyProfileScreenNavigationProp
 }

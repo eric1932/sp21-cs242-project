@@ -14,7 +14,7 @@ export default {
     //     screens: {
     //       TabOne: {
     //         screens: {
-    //           TabOneScreen: 'one',
+    //           TaskScreen: 'one',
     //         },
     //       },
     //       TabTwo: {
