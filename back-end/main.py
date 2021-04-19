@@ -74,7 +74,7 @@ async def login(item: LoginItem):
     :return: token or error digest
     """
     token = mongo.user_login(item.username, item.password)
-    return token if token else resp_403_password_mismatch  # notTODO return types are not same
+    return {"status": "success", "token": token} if token else resp_403_password_mismatch  # notTODO return types are not same
 
 
 @app.get("/logout/{username}")
