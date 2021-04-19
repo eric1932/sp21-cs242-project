@@ -132,6 +132,12 @@ async def user_show_task(token: Optional[str] = Header(None)):
         return resp_404_invalid_token
 
 
+@app.get("/template/list")
+async def list_templates():
+    temp_list = [each_file[:-3] for each_file in os.listdir('./checkin_tasks') if each_file.endswith('.py')]
+    return temp_list
+
+
 @app.get("/task/add/{template}")
 async def user_add_task(template: str,
                         period: int = 3600 * 24,  # default = 1 day
