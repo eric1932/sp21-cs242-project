@@ -118,6 +118,7 @@ async def user_add_task(template: str,
                         note: str = "",
                         cookies: Union[str, dict] = None,
                         token: Optional[str] = Header(None)):
+    # TODO cookies not yet implemented
     username = mongo.token_to_username(token)
     if username:
         iter_num = sched.find_job_available_id(username, template)  # TODO async
