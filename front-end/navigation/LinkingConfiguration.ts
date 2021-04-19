@@ -32,7 +32,7 @@ export default {
           LoginScreen: 'login'
         }
       },
-      // NotFound: '*',
+      // NotFound: '*', TODO restore
     }
   },
 };

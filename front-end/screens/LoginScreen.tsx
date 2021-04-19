@@ -5,6 +5,7 @@ import {validateUser, validateUserToken} from "../utils/API";
 import {LoginProps, LoginScreenNavigationProp} from "../types";
 
 function handleLogin(useTokenLogin: boolean, username: string, password: string, token: string, navigation: LoginScreenNavigationProp) {
+  // TODO fail message
   if (useTokenLogin) {
     return async () => {
       let result: boolean = await validateUserToken(token)

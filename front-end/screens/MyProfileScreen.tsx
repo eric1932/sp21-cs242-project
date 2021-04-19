@@ -4,6 +4,7 @@ import {View} from '../components/Themed';
 import {getToken, removeToken} from "../utils/Storage";
 import MyProfileItem from "../components/MyProfileItem";
 import {MyProfileProps} from "../types";
+import {logoutUser} from "../utils/API";
 
 export default function MyProfileScreen(props: MyProfileProps) {
   let [token, setToken] = React.useState('')
@@ -20,11 +21,29 @@ export default function MyProfileScreen(props: MyProfileProps) {
     <View style={styles.container}>
       <ScrollView>
         <MyProfileItem name={"token"} value={token} />
-        <Button title={"logout"} onPress={async () => {
+        <Button title={"logout save token"} onPress={async () => {
           // remove token
           await removeToken()
           // go back to login page
           props.navigation.replace('Login')
+        }} />
+        <Button title={"logout clear token"} onPress={async () => {
+          let token = await getToken()
+          await removeToken()
+          props.navigation.replace('Login')
+          // clear token
+          if (token) {
+            await logoutUser(token, false)
+          }
+        }} />
+        <Button title={"logout everywhere"} onPress={async () => {
+          let token = await getToken()
+          await removeToken()
+          props.navigation.replace('Login')
+          // clear token all
+          if (token) {
+            await logoutUser(token, true)
+          }
         }} />
       </ScrollView>
     </View>

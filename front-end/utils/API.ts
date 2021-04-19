@@ -26,8 +26,29 @@ export async function validateUser(username: string, password: string): Promise<
   }
 }
 
+export async function tokenToUsername(token: string): Promise<string | null> {
+  try {
+    let response = await fetch(`http://127.0.0.1:8000/show/${token}`, {
+      method: 'GET',
+      redirect: 'follow'
+    })
+    let username = await response.text()
+    if (username !== "null" && username !== null) {
+      return username.replace(/^"(.*)"$/, '$1');  // strip double quotes
+    } else {
+      return null
+    }
+  } catch (e) {
+    return null
+  }
+}
+
 export async function validateUserToken(token: string): Promise<boolean> {
-  var myHeaders = new Headers()
+  return await tokenToUsername(token) !== null
+}
+
+export async function listTasks(token: string): Promise<any> {
+  let myHeaders = new Headers()
   myHeaders.append("token", token)
 
   try {
@@ -36,8 +57,27 @@ export async function validateUserToken(token: string): Promise<boolean> {
       headers: myHeaders,
       redirect: 'follow'
     })
-    let list = await response.json()
-    return list instanceof Array
+    // should return a list
+    // TODO type
+    return await response.json()
+  } catch (e) {
+    return false
+  }
+}
+
+export async function logoutUser(token: string, fullLogout: boolean): Promise<boolean> {
+  let username = await tokenToUsername(token)
+
+  let myHeaders = new Headers();
+  myHeaders.append("token", token);
+
+  try {
+    let response = await fetch(`http://127.0.0.1:8000/logout/${username}?full_logout=${fullLogout}`, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    })
+    return response.status === 200
   } catch (e) {
     return false
   }
