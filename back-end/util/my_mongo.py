@@ -265,7 +265,7 @@ class MyMongoInstance:
         # Finally, set status
         self._collections[DBCollections.USER].update_one(
             {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
-            {"$set": {f"tasks.{index}.status": TaskStatus.SUCCESS}}
+            {"$set": {f"tasks.{index}.status": TaskStatus.SUCCESS.value}}
         )
         return True
 
@@ -284,7 +284,7 @@ class MyMongoInstance:
 
         self._collections[DBCollections.USER].update_one(
             {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
-            {"$set": {f"tasks.{index}.status": TaskStatus.ERROR}}
+            {"$set": {f"tasks.{index}.status": TaskStatus.ERROR.value}}
         )
         return True
 

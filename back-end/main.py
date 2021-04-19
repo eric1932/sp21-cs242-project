@@ -157,7 +157,7 @@ async def user_add_task(template: str,
             "last_success_time": datetime.datetime.min,  # oldest time
             "created_at": datetime.datetime.now(),
             "apscheduler_id": task_id,
-            "status": TaskStatus.FIRST_RUN
+            "status": TaskStatus.FIRST_RUN.value
         }
 
         # mongo user info update
