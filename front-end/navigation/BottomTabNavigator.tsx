@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 
-import {AntDesign, Feather, FontAwesome5} from '@expo/vector-icons';
+import {AntDesign, Feather, FontAwesome5, Ionicons} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
@@ -62,7 +62,17 @@ function TasksNavigator() {
       <TaskStack.Screen
         name="TaskScreen"
         component={TaskScreen}
-        options={{headerTitle: 'Tasks'}}
+        options={{
+          headerTitle: 'Tasks',
+          headerRight: ({tintColor}) => (
+            <Ionicons
+              name="refresh"
+              size={24}
+              color={tintColor}
+              style={{paddingRight: 20}}
+              onPress={() => window.location.reload()} />
+          )
+        }}
       />
     </TaskStack.Navigator>
   );
