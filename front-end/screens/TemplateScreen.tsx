@@ -9,8 +9,10 @@ import {API_BASE_URL} from "../constants/Networking";
 
 export default function TaskScreen() {
   let [templateList, setTemplateList] = React.useState<Array<string>>([])
-  let [showNewPage, setShowNewPage] = React.useState(false)
+  let [showDialog, setShowDialog] = React.useState(false)
   let [targetTemplateName, setTargetTemplateName] = React.useState('')
+  let [submitting, setSubmitting] = React.useState(false)
+  let [errorMessage, setErrorMessage] = React.useState('')
 
   let [period, setPeriod] = React.useState('86400')
   let [note, setNote] = React.useState('')
@@ -24,7 +26,7 @@ export default function TaskScreen() {
 
   return (
     <View style={styles.container}>
-      {showNewPage
+      {showDialog
         ? (<View style={{width: '60%'}}>
           <Text>Creating Task of {targetTemplateName}</Text>
           <TextInput placeholder={'Period (in secs): default 1 day'} onChangeText={(text) => {
@@ -33,31 +35,42 @@ export default function TaskScreen() {
           }}/>
           <TextInput placeholder={'Note'} onChangeText={(text) => setNote(text)}/>
           <TextInput placeholder={'Cookies'} onChangeText={(text) => setCookies(text)}/>
-          <Button title={'Create'} onPress={async () => {
+          <Button title={'Create'} disabled={submitting} onPress={async () => {
+            setSubmitting(true)
+
             let token = await getToken()
             let myHeaders = new Headers();
             myHeaders.append("token", token === null ? '' : token);
 
             try {
               let response = await fetch(
-                `${API_BASE_URL}/task/add/${targetTemplateName}?period=${period}&note=${note}`, {
+                `${API_BASE_URL}/task/add/${targetTemplateName}?`
+                + `period=${period}&note=${note}&cookies=${cookies}`, {
                   method: 'GET',
                   headers: myHeaders,
                   redirect: 'follow'
                 })
               if (response.status == 404) {
                 // fail
+                setErrorMessage(await response.text())
               } else {
                 // success
-                console.warn(await response.json())
+                setShowDialog(false)
               }
             } catch (e) {
               // fail
+              setErrorMessage(e.toString)
+            } finally {
+              setSubmitting(false)
             }
           }}/>
-          <Button title={'Back'} onPress={() => {
-            setShowNewPage(false)
+          <Button disabled={submitting} title={'Back'} onPress={() => {
+            setShowDialog(false)
           }}/>
+          {errorMessage === '' ? undefined
+            : <Text>
+              {errorMessage}
+            </Text>}
         </View>)
         : templateList.map((eachTemplate: string) => (
 
@@ -67,7 +80,7 @@ export default function TaskScreen() {
             underlayColor={'#eee'}
             onPress={() => {
               setTargetTemplateName(eachTemplate)
-              setShowNewPage(true)
+              setShowDialog(true)
             }}>
             <ListItem name={eachTemplate} value={(
               <Entypo name="plus" size={24} color="black"/>
