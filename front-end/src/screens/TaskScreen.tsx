@@ -84,7 +84,9 @@ export default function TaskScreen() {
                     name={item.apscheduler_id.join('-') + (item.note === '' ? '' : (': ' + item.note))}
                     value={(
                       <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={performEditTask(setShowEditDialog, setPeriod, setNote, item)}>
+                        <TouchableOpacity onPress={
+                          () => performEditTask(setShowEditDialog, setPeriod, setNote, item)
+                        }>
                           <AntDesign name="edit" size={24} color="black"/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={

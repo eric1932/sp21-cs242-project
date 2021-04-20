@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Dispatch} from 'react';
 import {Button, StyleSheet, Text, TextInput, TouchableHighlight} from 'react-native';
 import {View} from '../components/Themed';
 import {getTemplateList} from "../utils/API";
@@ -6,7 +7,6 @@ import ListItem from "../components/ListItem";
 import {Entypo} from "@expo/vector-icons";
 import {getToken} from "../utils/Storage";
 import {API_BASE_URL} from "../constants/Networking";
-import {Dispatch} from "react";
 
 function performInstantiateTask(setSubmitting: Dispatch<boolean>,
                                 targetTemplateName: string,
