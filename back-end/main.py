@@ -142,7 +142,7 @@ async def list_templates():
 async def user_add_task(template: str,
                         period: int = 3600 * 24,  # default = 1 day
                         note: str = "",
-                        cookies: Union[str, dict] = None,
+                        cookies: str = "",
                         token: Optional[str] = Header(None)):
     # TODO cookies not yet implemented
     username = mongo.token_to_username(token)
