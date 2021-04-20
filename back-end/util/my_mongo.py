@@ -311,3 +311,23 @@ class MyMongoInstance:
             {"$pull": {f"tasks": None}}
         )
         return True
+
+    def task_update_note(self, task_id_str: str, note: str) -> bool:
+        """
+        Update the note of a given task
+        :param task_id_str: TaskID as str
+        :return: True if success
+        """
+        task_id = task_id_str.split('-')
+        try:
+            index = self._task_find_index(task_id)
+        except ValueError:
+            return False
+        if index == -1:
+            return False
+
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: task_id[0]},
+            {"$set": {f"tasks.{index}.note": note}}
+        )
+        return True

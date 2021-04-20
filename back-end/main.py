@@ -184,3 +184,15 @@ async def user_remove_task(task_id_str: str,
             return {"status": "fail", "error": "cannot find task"}
     else:
         return resp_404_invalid_token
+
+
+@app.get("/task/update/{ap_id}")
+async def user_update_task(ap_id: str,
+                           note: str,  # new note
+                           token: Optional[str] = Header(None)):
+    username = mongo.token_to_username(token)
+    if username:
+        mongo.task_update_note(ap_id, note)
+        return {"status": "success"}
+    else:
+        return resp_404_invalid_token
