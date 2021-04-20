@@ -1,4 +1,5 @@
 import {API_BASE_URL} from "../constants/Networking"
+import {userTaskItem} from "../types";
 
 
 export async function validateUser(username: string, password: string): Promise<string | null> {
@@ -48,7 +49,7 @@ export async function validateUserToken(token: string): Promise<boolean> {
   return await tokenToUsername(token) !== null
 }
 
-export async function listTasks(token: string): Promise<boolean> {
+export async function listTasks(token: string): Promise<userTaskItem[]> {
   let myHeaders = new Headers()
   myHeaders.append("token", token)
 
@@ -58,11 +59,9 @@ export async function listTasks(token: string): Promise<boolean> {
       headers: myHeaders,
       redirect: 'follow'
     })
-    // should return a list
-    // TODO type
     return await response.json()
   } catch (e) {
-    return false
+    return []
   }
 }
 
@@ -93,5 +92,21 @@ export async function getTemplateList(): Promise<[]> {
     return await response.json()
   } catch (e) {
     return []
+  }
+}
+
+export async function deleteTask(token: string, item: userTaskItem): Promise<boolean> {
+  let myHeaders = new Headers();
+  myHeaders.append("token", token);
+
+  try {
+    let response = await fetch(`http://127.0.0.1:8000/task/remove/${item.apscheduler_id.join('-')}`, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    })
+    return response.status !== 404;
+  } catch (e) {
+    return false
   }
 }

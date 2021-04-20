@@ -49,3 +49,13 @@ export type TemplateScreenNavigationProp = StackNavigationProp<TemplateParamList
 export type TemplateProps = {
   navigation: TemplateScreenNavigationProp
 }
+
+export type userTaskItem = {
+  template: string,
+  period: number,
+  note: string,
+  last_success_time: Date,
+  created_ad: Date,
+  apscheduler_id: [string, string, string],
+  status: number,
+}
