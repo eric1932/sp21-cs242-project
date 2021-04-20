@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactElement} from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {getToken, saveToken} from "../utils/Storage";
 import {validateUser, validateUserToken} from "../utils/API";
@@ -26,14 +26,14 @@ function handleLogin(useTokenLogin: boolean, username: string, password: string,
 }
 
 // ref: https://github.com/Alhydra/React-Native-Login-Screen-Tutorial
-export default function LoginScreen({navigation}: LoginProps) {
+export default function LoginScreen({navigation}: LoginProps): ReactElement {
   const [useTokenLogin, setTokenLogin] = React.useState(false)
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [token, setToken] = React.useState('')
 
   React.useEffect(() => {
-    getToken().then(token => {
+    void getToken().then(token => {
       if (token !== null) {
         navigation.replace('Root')
       }

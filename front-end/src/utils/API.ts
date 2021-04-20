@@ -21,8 +21,7 @@ export async function validateUser(username: string, password: string): Promise<
     if (response.status == 403) {
       return null
     }
-    const loginJson = await response.json()
-    return loginJson.token
+    return (await response.json()).token
   } catch (e) {
     return null
   }
@@ -30,7 +29,7 @@ export async function validateUser(username: string, password: string): Promise<
 
 export async function tokenToUsername(token: string): Promise<string | null> {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/show/${token}`, {
+    const response = await fetch(`${API_BASE_URL}/show/${token}`, {
       method: 'GET',
       redirect: 'follow'
     })
@@ -54,7 +53,7 @@ export async function listTasks(token: string): Promise<userTaskItem[]> {
   myHeaders.append("token", token)
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/task", {
+    const response = await fetch(`${API_BASE_URL}/task`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'
@@ -72,12 +71,18 @@ export async function logoutUser(token: string, fullLogout: boolean): Promise<bo
   myHeaders.append("token", token);
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/logout/${username}?full_logout=${fullLogout}`, {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    })
-    return response.status === 200
+    if (username) {
+      const response = await fetch(
+        `${API_BASE_URL}/logout/${username}?full_logout=${fullLogout ? '1' : '0'}`,
+        {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+        })
+      return response.status === 200
+    } else {
+      return false
+    }
   } catch (e) {
     return false
   }
@@ -85,7 +90,7 @@ export async function logoutUser(token: string, fullLogout: boolean): Promise<bo
 
 export async function getTemplateList(): Promise<[]> {
   try {
-    const response = await fetch("http://127.0.0.1:8000/template/list", {
+    const response = await fetch(`${API_BASE_URL}/template/list`, {
       method: 'GET',
       redirect: 'follow'
     })
@@ -100,7 +105,7 @@ export async function deleteTask(token: string, item: userTaskItem): Promise<boo
   myHeaders.append("token", token);
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/task/remove/${item.apscheduler_id.join('-')}`, {
+    const response = await fetch(`${API_BASE_URL}/task/remove/${item.apscheduler_id.join('-')}`, {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'

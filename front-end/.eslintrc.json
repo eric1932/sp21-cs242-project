@@ -26,6 +26,20 @@
     "jest"
   ],
   "rules": {
+    "@typescript-eslint/no-unsafe-call": 0,
+    "@typescript-eslint/no-unsafe-member-access": 0,
+    "@typescript-eslint/no-unsafe-return": 0
   },
-  "ignorePatterns": ["**/*.js"]
+  "ignorePatterns": [
+    "**/*.js",
+    "BottomTabNavigator.tsx",
+    "App.tsx",
+    "Themed.tsx",
+    "useCachedResources.ts"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

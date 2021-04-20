@@ -6,6 +6,7 @@
 import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
+import {ReactElement} from 'react';
 import {ColorSchemeName} from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -14,7 +15,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import LoginScreen from "../screens/LoginScreen";
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }): ReactElement {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}

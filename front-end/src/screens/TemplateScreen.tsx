@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dispatch} from 'react';
+import {Dispatch, ReactElement} from 'react';
 import {Button, StyleSheet, Text, TextInput, TouchableHighlight} from 'react-native';
 import {View} from '../components/Themed';
 import {getTemplateList} from "../utils/API";
@@ -46,7 +46,7 @@ function performInstantiateTask(setSubmitting: Dispatch<boolean>,
   };
 }
 
-export default function TaskScreen() {
+export default function TaskScreen(): ReactElement {
   const [templateList, setTemplateList] = React.useState<Array<string>>([])
   const [showDialog, setShowDialog] = React.useState(false)
   const [targetTemplateName, setTargetTemplateName] = React.useState('')
@@ -58,8 +58,8 @@ export default function TaskScreen() {
   const [cookies, setCookies] = React.useState('')
 
   React.useEffect(() => {
-    getTemplateList().then((result: Array<string>) => {
-      setTemplateList([...templateList, ...result])
+    void getTemplateList().then((result: Array<string>) => {
+      setTemplateList([...result])
     })
   }, [])
 

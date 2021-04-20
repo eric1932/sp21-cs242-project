@@ -1,9 +1,9 @@
-import React from "react";
+import React, {ReactElement} from "react";
 import {Text} from "./Themed";
 import {View} from "react-native";
 import {MyProfileItemProps} from "../types";
 
-export default function ListItem(props: MyProfileItemProps) {
+export default function ListItem(props: MyProfileItemProps): ReactElement {
   return (
     <View style={{
       alignItems: 'center',

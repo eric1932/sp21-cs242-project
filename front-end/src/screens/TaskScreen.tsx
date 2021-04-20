@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Dispatch, ReactElement} from 'react';
 import {Button, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {View} from '../components/Themed';
 import {deleteTask, listTasks} from "../utils/API";
@@ -6,7 +7,6 @@ import {getToken} from "../utils/Storage";
 import {userTaskItem} from "../types";
 import ListItem from "../components/ListItem";
 import {AntDesign, Feather} from "@expo/vector-icons";
-import {Dispatch} from "react";
 
 async function performDeleteTask(item: userTaskItem,
                                  index: number,
@@ -41,7 +41,7 @@ function performEditTask(setShowEditDialog: Dispatch<boolean>,
   };
 }
 
-export default function TaskScreen() {
+export default function TaskScreen(): ReactElement {
   const [userTaskList, setUserTaskList] = React.useState<userTaskItem[]>([])
   const [showEditDialog, setShowEditDialog] = React.useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = React.useState(-1)
@@ -50,8 +50,8 @@ export default function TaskScreen() {
   const [origNote, setNote] = React.useState('')
 
   React.useEffect(() => {
-    getToken().then(token => {
-      listTasks(token ? token : '').then(result => {
+    void getToken().then(token => {
+      void listTasks(token ? token : '').then(result => {
         setUserTaskList([...result])
       })
     })
@@ -85,7 +85,7 @@ export default function TaskScreen() {
                     value={(
                       <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity onPress={
-                          () => performEditTask(setShowEditDialog, setPeriod, setNote, item)
+                          performEditTask(setShowEditDialog, setPeriod, setNote, item)
                         }>
                           <AntDesign name="edit" size={24} color="black"/>
                         </TouchableOpacity>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {ReactElement} from 'react';
 import {Button, ScrollView, StyleSheet} from 'react-native';
 import {View} from '../components/Themed';
 import {getToken, removeToken} from "../utils/Storage";
@@ -6,11 +7,11 @@ import ListItem from "../components/ListItem";
 import {MyProfileProps} from "../types";
 import {logoutUser} from "../utils/API";
 
-export default function MyProfileScreen(props: MyProfileProps) {
+export default function MyProfileScreen(props: MyProfileProps): ReactElement {
   const [token, setToken] = React.useState('')
 
   React.useEffect(() => {
-    getToken().then(token => {
+    void getToken().then(token => {
       if (token) {
         setToken(token)
       }

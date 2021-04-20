@@ -1,9 +1,8 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
-import TemplateScreen from '../../src/screens/TemplateScreen';
 import ListItem from '../../src/components/ListItem';
 
-it('TemplateScreen', () => {
+it('ListItem', () => {
   const tree = renderer.create(
     <ListItem name="test" value="test" />,
   ).toJSON();
