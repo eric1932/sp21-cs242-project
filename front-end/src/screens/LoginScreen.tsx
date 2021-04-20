@@ -1,9 +1,20 @@
+/**
+ * Login Screen
+ */
 import React, {ReactElement} from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {getToken, saveToken} from "../utils/Storage";
 import {validateUser, validateUserToken} from "../utils/API";
 import {LoginProps, LoginScreenNavigationProp} from "../types";
 
+/**
+ * Handle UI login action
+ * @param useTokenLogin true if token is given
+ * @param username
+ * @param password
+ * @param token
+ * @param navigation used to change current page
+ */
 function handleLogin(useTokenLogin: boolean, username: string, password: string, token: string, navigation: LoginScreenNavigationProp) {
   // TODO fail message
   if (useTokenLogin) {

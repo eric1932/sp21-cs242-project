@@ -1,7 +1,16 @@
+/**
+ * My API handler
+ */
+
 import {API_BASE_URL} from "../constants/Networking"
 import {userTaskItem} from "../types";
 
 
+/**
+ * Validate username & password and get token if possible
+ * @param username
+ * @param password
+ */
 export async function validateUser(username: string, password: string): Promise<string | null> {
   const myHeaders = new Headers()
   myHeaders.append("Content-Type", "application/json")
@@ -27,6 +36,10 @@ export async function validateUser(username: string, password: string): Promise<
   }
 }
 
+/**
+ * Translate token into username, if applicable
+ * @param token
+ */
 export async function tokenToUsername(token: string): Promise<string | null> {
   try {
     const response = await fetch(`${API_BASE_URL}/show/${token}`, {
@@ -44,10 +57,18 @@ export async function tokenToUsername(token: string): Promise<string | null> {
   }
 }
 
+/**
+ * Validate if a token is valid
+ * @param token
+ */
 export async function validateUserToken(token: string): Promise<boolean> {
   return await tokenToUsername(token) !== null
 }
 
+/**
+ * List a user's active tasks
+ * @param token
+ */
 export async function listTasks(token: string): Promise<userTaskItem[]> {
   const myHeaders = new Headers()
   myHeaders.append("token", token)
@@ -64,6 +85,11 @@ export async function listTasks(token: string): Promise<userTaskItem[]> {
   }
 }
 
+/**
+ * Logout the user
+ * @param token used to authenticate
+ * @param fullLogout set true to remove all tokens related to this user
+ */
 export async function logoutUser(token: string, fullLogout: boolean): Promise<boolean> {
   const username = await tokenToUsername(token)
 
@@ -88,6 +114,9 @@ export async function logoutUser(token: string, fullLogout: boolean): Promise<bo
   }
 }
 
+/**
+ * Get all templates
+ */
 export async function getTemplateList(): Promise<[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/template/list`, {
@@ -100,6 +129,11 @@ export async function getTemplateList(): Promise<[]> {
   }
 }
 
+/**
+ * Stop & remove a task from user
+ * @param token user's access token
+ * @param item the task to remove
+ */
 export async function deleteTask(token: string, item: userTaskItem): Promise<boolean> {
   const myHeaders = new Headers();
   myHeaders.append("token", token);

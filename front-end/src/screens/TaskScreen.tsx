@@ -1,3 +1,6 @@
+/**
+ * Task Screen
+ */
 import * as React from 'react';
 import {Dispatch, ReactElement} from 'react';
 import {Button, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
@@ -8,6 +11,14 @@ import {userTaskItem} from "../types";
 import ListItem from "../components/ListItem";
 import {AntDesign, Feather} from "@expo/vector-icons";
 
+/**
+ * Handle UI delete request
+ * @param item the task to delete
+ * @param index the index that is selected
+ * @param showConfirmDelete the state of index of previously selected item
+ * @param setShowConfirmDelete setter
+ * @param setUserTaskList used to refresh deleted list
+ */
 async function performDeleteTask(item: userTaskItem,
                                  index: number,
                                  showConfirmDelete: number,
@@ -30,6 +41,13 @@ async function performDeleteTask(item: userTaskItem,
   }
 }
 
+/**
+ * Handle UI edit request
+ * @param setShowEditDialog set self visibility
+ * @param setPeriod
+ * @param setNote
+ * @param item the task to update
+ */
 function performEditTask(setShowEditDialog: Dispatch<boolean>,
                          setPeriod: Dispatch<string>,
                          setNote: Dispatch<string>,

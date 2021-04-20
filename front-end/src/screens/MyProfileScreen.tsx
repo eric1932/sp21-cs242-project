@@ -1,3 +1,6 @@
+/**
+ * My Profile Screen
+ */
 import * as React from 'react';
 import {ReactElement} from 'react';
 import {Button, ScrollView, StyleSheet} from 'react-native';

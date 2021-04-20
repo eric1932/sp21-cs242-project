@@ -1,3 +1,6 @@
+/**
+ * List item component
+ */
 import React, {ReactElement} from "react";
 import {Text} from "./Themed";
 import {View} from "react-native";

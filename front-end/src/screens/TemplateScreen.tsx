@@ -1,3 +1,6 @@
+/**
+ * Template Screen
+ */
 import * as React from 'react';
 import {Dispatch, ReactElement} from 'react';
 import {Button, StyleSheet, Text, TextInput, TouchableHighlight} from 'react-native';

@@ -1,3 +1,6 @@
+/**
+ * Not Found Screen
+ */
 import {StackScreenProps} from '@react-navigation/stack';
 import * as React from 'react';
 import {ReactElement} from 'react';
