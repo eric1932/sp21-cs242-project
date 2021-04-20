@@ -1,17 +1,17 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
-import LoginScreen from "../../src/screens/LoginScreen";
+import LoginScreen from '../../src/screens/LoginScreen';
 
 const createTestProps = (props) => ({
   navigation: {
-    navigate: jest.fn()
+    navigate: jest.fn(),
   },
-  ...props
+  ...props,
 });
 
 it('LoginScreen', () => {
   const tree = renderer.create(
-    <LoginScreen {...createTestProps({})} />
+    <LoginScreen {...createTestProps({})} />,
   ).toJSON();
 
   expect(tree).toMatchSnapshot();
