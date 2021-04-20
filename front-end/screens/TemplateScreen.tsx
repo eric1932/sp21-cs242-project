@@ -6,6 +6,45 @@ import ListItem from "../components/ListItem";
 import {Entypo} from "@expo/vector-icons";
 import {getToken} from "../utils/Storage";
 import {API_BASE_URL} from "../constants/Networking";
+import {Dispatch} from "react";
+
+function performInstantiateTask(setSubmitting: Dispatch<boolean>,
+                                targetTemplateName: string,
+                                period: string,
+                                note: string,
+                                cookies: string,
+                                setErrorMessage: Dispatch<string>,
+                                setShowDialog: Dispatch<boolean>): () => void {
+  return async () => {
+    setSubmitting(true)
+
+    let token = await getToken()
+    let myHeaders = new Headers();
+    myHeaders.append("token", token === null ? '' : token);
+
+    try {
+      let response = await fetch(
+        `${API_BASE_URL}/task/add/${targetTemplateName}?`
+        + `period=${period}&note=${note}&cookies=${cookies}`, {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+        })
+      if (response.status == 404) {
+        // fail
+        setErrorMessage(await response.text())
+      } else {
+        // success
+        setShowDialog(false)
+      }
+    } catch (e) {
+      // fail
+      setErrorMessage(e.toString)
+    } finally {
+      setSubmitting(false)
+    }
+  };
+}
 
 export default function TaskScreen() {
   let [templateList, setTemplateList] = React.useState<Array<string>>([])
@@ -35,35 +74,16 @@ export default function TaskScreen() {
           }}/>
           <TextInput placeholder={'Note'} onChangeText={(text) => setNote(text)}/>
           <TextInput placeholder={'Cookies'} onChangeText={(text) => setCookies(text)}/>
-          <Button title={'Create'} disabled={submitting} onPress={async () => {
-            setSubmitting(true)
-
-            let token = await getToken()
-            let myHeaders = new Headers();
-            myHeaders.append("token", token === null ? '' : token);
-
-            try {
-              let response = await fetch(
-                `${API_BASE_URL}/task/add/${targetTemplateName}?`
-                + `period=${period}&note=${note}&cookies=${cookies}`, {
-                  method: 'GET',
-                  headers: myHeaders,
-                  redirect: 'follow'
-                })
-              if (response.status == 404) {
-                // fail
-                setErrorMessage(await response.text())
-              } else {
-                // success
-                setShowDialog(false)
-              }
-            } catch (e) {
-              // fail
-              setErrorMessage(e.toString)
-            } finally {
-              setSubmitting(false)
-            }
-          }}/>
+          <Button title={'Create'}
+                  disabled={submitting}
+                  onPress={performInstantiateTask(
+                    setSubmitting,
+                    targetTemplateName,
+                    period,
+                    note,
+                    cookies,
+                    setErrorMessage,
+                    setShowDialog)}/>
           <Button disabled={submitting} title={'Back'} onPress={() => {
             setShowDialog(false)
           }}/>
