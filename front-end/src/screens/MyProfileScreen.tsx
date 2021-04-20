@@ -7,7 +7,7 @@ import {MyProfileProps} from "../types";
 import {logoutUser} from "../utils/API";
 
 export default function MyProfileScreen(props: MyProfileProps) {
-  let [token, setToken] = React.useState('')
+  const [token, setToken] = React.useState('')
 
   React.useEffect(() => {
     getToken().then(token => {
@@ -31,7 +31,7 @@ export default function MyProfileScreen(props: MyProfileProps) {
         </View>
         <View style={styles.listButtonWrapper}>
           <Button title={"logout clear token"} onPress={async () => {
-            let token = await getToken()
+            const token = await getToken()
             await removeToken()
             props.navigation.replace('Login')
             // clear token
@@ -42,7 +42,7 @@ export default function MyProfileScreen(props: MyProfileProps) {
         </View>
         <View style={styles.listButtonWrapper}>
           <Button title={"logout everywhere"} onPress={async () => {
-            let token = await getToken()
+            const token = await getToken()
             await removeToken()
             props.navigation.replace('Login')
             // clear token all

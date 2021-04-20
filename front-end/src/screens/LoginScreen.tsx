@@ -8,7 +8,7 @@ function handleLogin(useTokenLogin: boolean, username: string, password: string,
   // TODO fail message
   if (useTokenLogin) {
     return async () => {
-      let result: boolean = await validateUserToken(token)
+      const result: boolean = await validateUserToken(token)
       if (result) {
         await saveToken(token);
         navigation.replace('Root')
@@ -16,7 +16,7 @@ function handleLogin(useTokenLogin: boolean, username: string, password: string,
     };
   } else {
     return async () => {
-      let result: string | null = await validateUser(username, password)
+      const result: string | null = await validateUser(username, password)
       if (result) {
         await saveToken(result);
         navigation.replace('Root')
@@ -27,10 +27,10 @@ function handleLogin(useTokenLogin: boolean, username: string, password: string,
 
 // ref: https://github.com/Alhydra/React-Native-Login-Screen-Tutorial
 export default function LoginScreen({navigation}: LoginProps) {
-  let [useTokenLogin, setTokenLogin] = React.useState(false)
-  let [username, setUsername] = React.useState('')
-  let [password, setPassword] = React.useState('')
-  let [token, setToken] = React.useState('')
+  const [useTokenLogin, setTokenLogin] = React.useState(false)
+  const [username, setUsername] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [token, setToken] = React.useState('')
 
   React.useEffect(() => {
     getToken().then(token => {

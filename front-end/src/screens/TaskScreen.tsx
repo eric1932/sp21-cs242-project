@@ -15,12 +15,12 @@ async function performDeleteTask(item: userTaskItem,
                                  setUserTaskList: Dispatch<userTaskItem[]>) {
   if (index === showConfirmDelete) {
     // delete
-    let token = await getToken()
+    const token = await getToken()
     if (token) {
       await deleteTask(token, item)
     }
     // refresh
-    let result = await listTasks(token ? token : '')
+    const result = await listTasks(token ? token : '')
     setUserTaskList([...result])
     // reset state
     setShowConfirmDelete(-1)
@@ -42,12 +42,12 @@ function performEditTask(setShowEditDialog: Dispatch<boolean>,
 }
 
 export default function TaskScreen() {
-  let [userTaskList, setUserTaskList] = React.useState<userTaskItem[]>([])
-  let [showEditDialog, setShowEditDialog] = React.useState(false)
-  let [showConfirmDelete, setShowConfirmDelete] = React.useState(-1)
+  const [userTaskList, setUserTaskList] = React.useState<userTaskItem[]>([])
+  const [showEditDialog, setShowEditDialog] = React.useState(false)
+  const [showConfirmDelete, setShowConfirmDelete] = React.useState(-1)
 
-  let [origPeriod, setPeriod] = React.useState('')
-  let [origNote, setNote] = React.useState('')
+  const [origPeriod, setPeriod] = React.useState('')
+  const [origNote, setNote] = React.useState('')
 
   React.useEffect(() => {
     getToken().then(token => {

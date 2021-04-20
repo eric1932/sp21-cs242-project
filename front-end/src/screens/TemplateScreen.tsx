@@ -18,12 +18,12 @@ function performInstantiateTask(setSubmitting: Dispatch<boolean>,
   return async () => {
     setSubmitting(true)
 
-    let token = await getToken()
-    let myHeaders = new Headers();
+    const token = await getToken()
+    const myHeaders = new Headers();
     myHeaders.append("token", token === null ? '' : token);
 
     try {
-      let response = await fetch(
+      const response = await fetch(
         `${API_BASE_URL}/task/add/${targetTemplateName}?`
         + `period=${period}&note=${note}&cookies=${cookies}`, {
           method: 'GET',
@@ -39,7 +39,7 @@ function performInstantiateTask(setSubmitting: Dispatch<boolean>,
       }
     } catch (e) {
       // fail
-      setErrorMessage(e.toString)
+      setErrorMessage(e.toString())
     } finally {
       setSubmitting(false)
     }
@@ -47,15 +47,15 @@ function performInstantiateTask(setSubmitting: Dispatch<boolean>,
 }
 
 export default function TaskScreen() {
-  let [templateList, setTemplateList] = React.useState<Array<string>>([])
-  let [showDialog, setShowDialog] = React.useState(false)
-  let [targetTemplateName, setTargetTemplateName] = React.useState('')
-  let [submitting, setSubmitting] = React.useState(false)
-  let [errorMessage, setErrorMessage] = React.useState('')
+  const [templateList, setTemplateList] = React.useState<Array<string>>([])
+  const [showDialog, setShowDialog] = React.useState(false)
+  const [targetTemplateName, setTargetTemplateName] = React.useState('')
+  const [submitting, setSubmitting] = React.useState(false)
+  const [errorMessage, setErrorMessage] = React.useState('')
 
-  let [period, setPeriod] = React.useState('86400')
-  let [note, setNote] = React.useState('')
-  let [cookies, setCookies] = React.useState('')
+  const [period, setPeriod] = React.useState('86400')
+  const [note, setNote] = React.useState('')
+  const [cookies, setCookies] = React.useState('')
 
   React.useEffect(() => {
     getTemplateList().then((result: Array<string>) => {
