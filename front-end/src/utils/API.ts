@@ -149,3 +149,25 @@ export async function deleteTask(token: string, item: userTaskItem): Promise<boo
     return false
   }
 }
+
+/**
+ * Update the note for a task
+ * @param token
+ * @param taskID
+ * @param newNote
+ */
+export async function updateTaskNote(token: string, taskID: string, newNote: string): Promise<boolean> {
+  const myHeaders = new Headers();
+  myHeaders.append("token", token);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/task/update/${taskID}?note=${newNote}`, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    })
+    return response.status !== 404
+  } catch (e) {
+    return false
+  }
+}

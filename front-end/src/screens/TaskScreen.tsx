@@ -5,7 +5,7 @@ import * as React from 'react';
 import {Dispatch, ReactElement} from 'react';
 import {Button, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native';
 import {View} from '../components/Themed';
-import {deleteTask, listTasks} from "../utils/API";
+import {deleteTask, listTasks, updateTaskNote} from "../utils/API";
 import {getToken} from "../utils/Storage";
 import {userTaskItem} from "../types";
 import ListItem from "../components/ListItem";
@@ -46,16 +46,20 @@ async function performDeleteTask(item: userTaskItem,
  * @param setShowEditDialog set self visibility
  * @param setPeriod
  * @param setNote
+ * @param setTargetTaskID
  * @param item the task to update
  */
 function performEditTask(setShowEditDialog: Dispatch<boolean>,
                          setPeriod: Dispatch<string>,
                          setNote: Dispatch<string>,
+                         setTargetTaskID: Dispatch<string>,
                          item: userTaskItem): () => void {
   return () => {
+
     setShowEditDialog(true)
     setPeriod(item.period.toString())
     setNote(item.note)
+    setTargetTaskID(item.apscheduler_id.join('-'))
   };
 }
 
@@ -64,8 +68,9 @@ export default function TaskScreen(): ReactElement {
   const [showEditDialog, setShowEditDialog] = React.useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = React.useState(-1)
 
-  const [origPeriod, setPeriod] = React.useState('')
-  const [origNote, setNote] = React.useState('')
+  const [targetTaskID, setTargetTaskID] = React.useState('')
+  const [updatedPeriod, setPeriod] = React.useState('')
+  const [updatedNote, setNote] = React.useState('')
 
   React.useEffect(() => {
     void getToken().then(token => {
@@ -79,19 +84,27 @@ export default function TaskScreen(): ReactElement {
     <View style={styles.container}>
       {showEditDialog
         ? (<View style={{width: '60%'}}>
-          <Text>Edit</Text>
+          <Text>Edit: {targetTaskID}</Text>
           <Text>Period (in secs)</Text>
-          <TextInput value={origPeriod} onChangeText={(text) => {
+          <TextInput value={updatedPeriod} onChangeText={(text) => {
             setPeriod(text)
           }}/>
           <Text>Note</Text>
-          <TextInput value={origNote} placeholder={'(empty)'} onChangeText={(text) => {
+          <TextInput value={updatedNote} placeholder={'(empty)'} onChangeText={(text) => {
             setNote(text)
           }}/>
           <Text>Cookies</Text>
           <TextInput placeholder={'(empty)'}/>
-          <Button title={'Update'} onPress={() => {
-            // TODO
+          <Button title={'Update'} onPress={async () => {
+            const token = await getToken()
+            if (token) {
+              await updateTaskNote(token, targetTaskID, updatedNote)
+              // refresh
+              const result = await listTasks(token ? token : '')
+              setUserTaskList([...result])
+              // go back
+              setShowEditDialog(false)
+            }
           }}/>
           <Button title={'Back'} onPress={() => {
             setShowEditDialog(false)
@@ -103,8 +116,13 @@ export default function TaskScreen(): ReactElement {
                     value={(
                       <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity onPress={
-                          performEditTask(setShowEditDialog, setPeriod, setNote, item)
-                        }>
+                          performEditTask(
+                            setShowEditDialog,
+                            setPeriod,
+                            setNote,
+                            setTargetTaskID,
+                            item
+                          )}>
                           <AntDesign name="edit" size={24} color="black"/>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={
