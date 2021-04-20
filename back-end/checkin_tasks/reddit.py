@@ -11,8 +11,8 @@ from checkin_misc.checkin_class_template import CheckinTemplate, log
 
 
 class Workflow(CheckinTemplate):
-    def __init__(self):
-        super().__init__("Reddit")
+    def __init__(self, *args, **kwargs):
+        super().__init__("Reddit", *args, **kwargs)
 
     @log
     def exec(self):
