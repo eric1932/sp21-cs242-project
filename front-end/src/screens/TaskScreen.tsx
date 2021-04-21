@@ -112,7 +112,10 @@ export default function TaskScreen(): ReactElement {
         </View>)
         : userTaskList.map((item, index) => (
           <ListItem key={item.apscheduler_id.join('-')}
-                    name={item.apscheduler_id.join('-') + (item.note === '' ? '' : (': ' + item.note))}
+                    name={
+                      item.apscheduler_id.join('-')
+                      + ': ' + (item.status === 0 ? 'FIRST_RUN' : item.status === 1 ? 'SUCCESS' : 'ERROR')
+                      + ': Note=' + (item.note === '' ? '' : item.note)}
                     value={(
                       <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity onPress={

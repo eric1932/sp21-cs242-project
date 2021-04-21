@@ -1,10 +1,17 @@
-## Daily Checkin
+# Daily Checkin - Front End
 
-A full-stack application that interacts with third-party websites periodically to help complete repeated works.
+## Setup
 
-This project has front-end part as well as back-end part.
+```shell
+yarn install
+npm start  # open Expo
+```
 
-To get started, see `README.md` inside front-end/back-end for more detail.
+**Also, the API server needs to be started!**
+
+
+
+
 
 ## Abstract
 ### Project Purpose

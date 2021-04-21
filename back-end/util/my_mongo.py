@@ -270,6 +270,11 @@ class MyMongoInstance:
         return True
 
     def task_set_status_to_err(self, target_task_id: Union[TaskID, str]) -> bool:
+        """
+        Set the status of the task to be ERROR
+        :param target_task_id:
+        :return: True if success
+        """
         if isinstance(target_task_id, TaskID):
             target_task_id = list(target_task_id)
         else:
