@@ -15,7 +15,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 
 import util.credential_helper as credential_helper
-from util.types import Task, TaskID
+from util.types import Task, TaskID, TaskStatus
 
 dotenv.load_dotenv()
 
@@ -173,6 +173,9 @@ class MyMongoInstance:
             return token
         return None
 
+    def _remove_token_to_user(self, token: str):
+        self._collections[DBCollections.TOKEN_TO_USER].delete_one({"token": token})
+
     def user_logout(self, username: str, val_token: str, remove_all: bool = False) -> bool:
         """
         Logout a user and invalidate one/all tokens
@@ -184,13 +187,17 @@ class MyMongoInstance:
         query = self._user_query(username)
         if query and val_token in query[UserCollectionAttrs.TOKENS.value]:
             if remove_all:
+                tokens = query['tokens']
                 self._user_update_one(username, PymongoUpdateActions.SET, {
                     UserCollectionAttrs.TOKENS.value: []
                 })
+                for each_token in tokens:
+                    self._remove_token_to_user(each_token)
             else:
                 self._user_update_one(username, PymongoUpdateActions.PULL, {
                     UserCollectionAttrs.TOKENS.value: val_token
                 })
+                self._remove_token_to_user(val_token)
             return True
         return False
 
@@ -230,7 +237,7 @@ class MyMongoInstance:
             UserCollectionAttrs.TASKS.value: task
         })
 
-    def task_update_last_success_time(self, target_task_id: Union[TaskID, str]) -> bool:
+    def task_update_last_success_time_and_set_status_to_success(self, target_task_id: Union[TaskID, str]) -> bool:
         """
         Update last_success_time of a Task to current time.
         :param target_task_id: TaskID to find the Task
@@ -246,12 +253,43 @@ class MyMongoInstance:
             index = self._task_find_index(target_task_id)
         except ValueError:
             return False
+        if index == -1:
+            return False
 
         # Then, update it with current time
         # TODO magic?
         self._collections[DBCollections.USER].update_one(
             {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
             {"$set": {f"tasks.{index}.last_success_time": datetime.now()}}
+        )
+        # Finally, set status
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
+            {"$set": {f"tasks.{index}.status": TaskStatus.SUCCESS.value}}
+        )
+        return True
+
+    def task_set_status_to_err(self, target_task_id: Union[TaskID, str]) -> bool:
+        """
+        Set the status of the task to be ERROR
+        :param target_task_id:
+        :return: True if success
+        """
+        if isinstance(target_task_id, TaskID):
+            target_task_id = list(target_task_id)
+        else:
+            target_task_id = target_task_id.split('-')
+
+        try:
+            index = self._task_find_index(target_task_id)
+        except ValueError:
+            return False
+        if index == -1:
+            return False
+
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: target_task_id[0]},
+            {"$set": {f"tasks.{index}.status": TaskStatus.ERROR.value}}
         )
         return True
 
@@ -276,5 +314,25 @@ class MyMongoInstance:
         self._collections[DBCollections.USER].update_one(
             {UserCollectionAttrs.USERNAME.value: task_id[0]},
             {"$pull": {f"tasks": None}}
+        )
+        return True
+
+    def task_update_note(self, task_id_str: str, note: str) -> bool:
+        """
+        Update the note of a given task
+        :param task_id_str: TaskID as str
+        :return: True if success
+        """
+        task_id = task_id_str.split('-')
+        try:
+            index = self._task_find_index(task_id)
+        except ValueError:
+            return False
+        if index == -1:
+            return False
+
+        self._collections[DBCollections.USER].update_one(
+            {UserCollectionAttrs.USERNAME.value: task_id[0]},
+            {"$set": {f"tasks.{index}.note": note}}
         )
         return True

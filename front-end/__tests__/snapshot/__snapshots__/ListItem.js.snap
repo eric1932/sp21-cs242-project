@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListItem 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomWidth": 1,
+      "borderColor": "#eee",
+      "display": "flex",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginLeft": "5%",
+      "marginRight": "5%",
+      "paddingHorizontal": 10,
+      "paddingVertical": 10,
+      "width": "90%",
+    }
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#000",
+        },
+        undefined,
+      ]
+    }
+  >
+    test
+  </Text>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#000",
+        },
+        undefined,
+      ]
+    }
+  >
+    test
+  </Text>
+</View>
+`;

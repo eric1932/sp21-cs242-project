@@ -2,6 +2,7 @@
 Typedefs.
 """
 from datetime import datetime
+from enum import Enum
 from typing import TypedDict, NamedTuple
 
 
@@ -14,6 +15,12 @@ class TaskID(NamedTuple):
     num: str
 
 
+class TaskStatus(Enum):
+    FIRST_RUN = 0
+    SUCCESS = 1
+    ERROR = 2
+
+
 class Task(TypedDict):
     """
     Dict that is stored under user/tasks
@@ -24,3 +31,4 @@ class Task(TypedDict):
     last_success_time: datetime
     created_at: datetime
     apscheduler_id: TaskID
+    status: TaskStatus

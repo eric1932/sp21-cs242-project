@@ -12,8 +12,8 @@ class Workflow(CheckinTemplate):
     """
     The workflow for this task
     """
-    def __init__(self):
-        super().__init__("Google Weather")
+    def __init__(self, *args, **kwargs):
+        super().__init__("Google Weather", *args, **kwargs)
 
     @log
     def exec(self):

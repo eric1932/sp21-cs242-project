@@ -3,9 +3,11 @@ The main api server. Manage users and exec tasks periodically.
 """
 import datetime
 import os
-from typing import Optional
+from typing import Optional, Union
 
-from fastapi import FastAPI, Header
+from fastapi import FastAPI
+from fastapi import Header
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 import checkin_misc.periodic_task_scheduler as sched
@@ -14,10 +16,18 @@ from api_message import resp_401_logout_fail
 from api_message import resp_403_password_mismatch
 from api_message import resp_404_invalid_token
 from util.my_mongo import MyMongoInstance
-from util.types import Task, TaskID
+from util.types import Task, TaskID, TaskStatus
 
 app = FastAPI()
 mongo = MyMongoInstance()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # TODO fastapi_logging
@@ -64,7 +74,7 @@ async def login(item: LoginItem):
     :return: token or error digest
     """
     token = mongo.user_login(item.username, item.password)
-    return token if token else resp_403_password_mismatch  # notTODO return types are not same
+    return {"status": "success", "token": token} if token else resp_403_password_mismatch  # notTODO return types are not same
 
 
 @app.get("/logout/{username}")
@@ -81,6 +91,16 @@ async def logout(username: str, token: Optional[str] = Header(None), full_logout
         if result:
             return resp_200_logout_success
     return resp_401_logout_fail
+
+
+@app.get("/show/{token}")
+async def show_user_with_token(token: str):
+    """
+    Translate token into username
+    :param token: some token
+    :return: username
+    """
+    return mongo.token_to_username(token)
 
 
 @app.get("/sign_in/{name}")
@@ -112,11 +132,19 @@ async def user_show_task(token: Optional[str] = Header(None)):
         return resp_404_invalid_token
 
 
+@app.get("/template/list")
+async def list_templates():
+    temp_list = [each_file[:-3] for each_file in os.listdir('./checkin_tasks') if each_file.endswith('.py')]
+    return temp_list
+
+
 @app.get("/task/add/{template}")
 async def user_add_task(template: str,
                         period: int = 3600 * 24,  # default = 1 day
                         note: str = "",
+                        cookies: str = "",
                         token: Optional[str] = Header(None)):
+    # TODO cookies not yet implemented
     username = mongo.token_to_username(token)
     if username:
         iter_num = sched.find_job_available_id(username, template)  # TODO async
@@ -128,15 +156,15 @@ async def user_add_task(template: str,
             "note": note,
             "last_success_time": datetime.datetime.min,  # oldest time
             "created_at": datetime.datetime.now(),
-            "apscheduler_id": task_id
+            "apscheduler_id": task_id,
+            "status": TaskStatus.FIRST_RUN.value
         }
-        # TODO update last success time
 
         # mongo user info update
         mongo.task_add_to_user(username, task)
 
         # scheduler adding task
-        sched.add_task(period, task_id)
+        sched.add_task(period, task_id, cookies)
 
         return {"status": "success", "task": task}
     else:
@@ -154,5 +182,17 @@ async def user_remove_task(task_id_str: str,
             return {"status": "success"}
         else:
             return {"status": "fail", "error": "cannot find task"}
+    else:
+        return resp_404_invalid_token
+
+
+@app.get("/task/update/{ap_id}")
+async def user_update_task(ap_id: str,
+                           note: str,  # new note
+                           token: Optional[str] = Header(None)):
+    username = mongo.token_to_username(token)
+    if username:
+        mongo.task_update_note(ap_id, note)
+        return {"status": "success"}
     else:
         return resp_404_invalid_token
